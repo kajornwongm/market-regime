@@ -375,10 +375,51 @@ def main():
     adjusted=round(composite*v_mult,1)
     regime_label=classify_regime(scores,adjusted)
 
-    delta      = compute_delta(scores, prev_scores)
-    confidence = compute_confidence(scores, vix, bool(asset_flows or ticker_flows))
-    action     = build_action_panel(scores, regime_label, adjusted, confidence,
-                                    delta, sect_ranking, country_flows, ticker_flows, vix)
+    # Delta scores
+    delta = {k: round(scores[k] - prev_scores.get(k, scores[k]), 1) for k in scores} if prev_scores else {k: 0.0 for k in scores}
+
+    # Confidence score
+    _signals = []
+    _rb = scores["risk"]>60; _rbe = scores["risk"]<40
+    _vc = vix<22; _vf = vix>28
+    _le = scores["liquidity"]>55; _lt = scores["liquidity"]<45
+    if _rb:   _signals.extend([1, 1 if _vc else -1, 1 if _le else 0])
+    elif _rbe: _signals.extend([-1, -1 if _vf else 1, -1 if _lt else 0])
+    else:      _signals.extend([0,0,0])
+    _signals.append(1 if scores["growth"]>60 and _rb else (-1 if scores["growth"]<40 and _rbe else 0))
+    _align = abs(sum(_signals))/len(_signals) if _signals else 0
+    _base  = 40 + _align*50
+    if asset_flows or ticker_flows: _base = min(_base+10, 95)
+    confidence = round(_base, 0)
+
+    # Action panel
+    ow, uw, watch, ideas = [], [], [], []
+    if scores["inflation"]>65: ow+=["XLE","GLD","DBC"]; uw+=["QQQ","TLT"]
+    if scores["growth"]>65 and scores["risk"]>60: ow+=["QQQ","XLK"]; uw+=["XLU","TLT"]
+    if scores["risk"]<40: ow+=["TLT","SHY","GLD"]; uw+=["SPY","QQQ"]
+    if scores["liquidity"]>65: ow+=["VNQ","XLF"]
+    if scores["liquidity"]<35: uw+=["VNQ","XLF"]; watch+=["Cash buffer ≥ 30%"]
+    for c in (country_flows or [])[:3]:
+        if c["flow_4w_mn"]>100: ideas.append(f"Watch {c['ticker']} — inflow ${c['flow_4w_mn']:.0f}M")
+    if sect_ranking and sect_ranking[0]["rs"]>2:
+        ideas.append(f"Sector leader: {sect_ranking[0]['name']} RS +{sect_ranking[0]['rs']:.1f}%")
+    if vix>28: ideas.append("VIX elevated — size down")
+    elif vix<16 and adjusted>70: ideas.append("Low vol + high score — full size justified")
+    rising  = [k for k,v in delta.items() if v>=10]
+    falling = [k for k,v in delta.items() if v<=-10]
+    narrative = []
+    if rising:  narrative.append(f"{', '.join(r.title() for r in rising)} rising — momentum building")
+    if falling: narrative.append(f"{', '.join(f.title() for f in falling)} falling — watch regime shift")
+    if not rising and not falling: narrative.append("Scores stable — no major regime change")
+    action = {
+        "overweight":  list(dict.fromkeys(ow))[:5],
+        "underweight": list(dict.fromkeys(uw))[:5],
+        "watch":       watch[:3],
+        "ideas":       ideas[:5],
+        "narrative":   narrative[:2],
+        "confidence":  confidence,
+        "bias":        "bullish" if adjusted>60 else ("bearish" if adjusted<40 else "neutral"),
+    }
 
     output={
         "generated_at":    datetime.utcnow().isoformat()+"Z",
