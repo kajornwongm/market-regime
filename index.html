@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Market Regime Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080a0f;--bg2:#0e1117;--bg3:#141820;--bg4:#1c2230;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --text:#d4d8e2;--muted:#5a6070;
+  --green:#00d4a0;--blue:#4d9fff;--amber:#f0a500;--red:#ff5555;--purple:#a78bfa;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px}
+.shell{max-width:1440px;margin:0 auto;padding:1.5rem}
+header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.logo{font-family:var(--mono);font-size:1.1rem;font-weight:500;letter-spacing:.05em}
+.logo span{color:var(--green)}
+.meta{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;line-height:1.9}
+.live{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.regime-hero{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:2rem}
+.regime-label{font-size:1.4rem;font-weight:600}
+.strat span{color:var(--text);display:inline-block;margin:.15rem .3rem .15rem 0;padding:2px 8px;background:var(--bg3);border-radius:4px;border:1px solid var(--border2);font-size:12px}
+.score-col{text-align:right}
+.score-col .val{font-family:var(--mono);font-size:2.6rem;font-weight:300;line-height:1}
+.score-col .lbl{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:3px}
+.vol-col{text-align:center;padding:12px 16px;background:var(--bg3);border-radius:10px;border:1px solid var(--border)}
+.vol-col .vix{font-family:var(--mono);font-size:1.6rem;font-weight:300}
+.vol-col .vlbl{font-size:11px;color:var(--muted);margin-top:4px}
+
+.scores-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.25rem}
+.sc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.sc-name{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.sc-val{font-family:var(--mono);font-size:22px;margin-bottom:6px}
+.sc-track{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.sc-fill{height:100%;border-radius:2px;transition:width .6s}
+.sc-interp{font-size:11px;color:var(--muted);margin-top:5px}
+
+.ma-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+.ma-pill{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-family:var(--mono);font-size:12px;border:1px solid var(--border)}
+.ma-pill.bullish{background:rgba(0,212,160,.08);border-color:rgba(0,212,160,.2)}
+.ma-pill.bearish{background:rgba(255,85,85,.08);border-color:rgba(255,85,85,.2)}
+.ma-pill.neutral{background:var(--bg2)}
+.ma-dot{width:7px;height:7px;border-radius:50%}
+.ma-dot.bullish{background:var(--green)}.ma-dot.bearish{background:var(--red)}.ma-dot.neutral{background:var(--muted)}
+
+.alerts{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem}
+.alert{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:8px;font-size:12px;font-family:var(--mono)}
+.alert.warning{background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.2);color:var(--amber)}
+.alert.alert{background:rgba(255,85,85,.07);border:1px solid rgba(255,85,85,.2);color:var(--red)}
+.alert.info{background:rgba(77,159,255,.07);border:1px solid rgba(77,159,255,.15);color:var(--blue)}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.card-title{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.card-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.card-sub{font-size:11px;color:var(--muted);margin-bottom:10px;font-family:var(--mono)}
+
+.flow-notice{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:1.25rem}
+.flow-notice strong{color:var(--amber)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+
+/* Flow table: in/out split */
+.flow-split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.flow-half-title{font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.flow-half-title.in{color:var(--green)}.flow-half-title.out{color:var(--red)}
+.fr{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border)}
+.fr:last-child{border-bottom:none}
+.fr-name{flex:1;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fr-bar-wrap{width:60px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.fr-bar{height:100%;border-radius:2px}
+.fr-val{font-family:var(--mono);font-size:11px;min-width:68px;text-align:right}
+
+.c-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.c-row:last-child{border-bottom:none}
+.c-val{font-family:var(--mono);font-size:12px;min-width:48px;text-align:right}
+.c-ma{font-size:10px;padding:1px 7px;border-radius:4px;font-family:var(--mono)}
+.c-ma.bullish{background:rgba(0,212,160,.12);color:var(--green)}
+.c-ma.bearish{background:rgba(255,85,85,.1);color:var(--red)}
+.c-ma.neutral{background:var(--bg3);color:var(--muted)}
+.s-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.s-row:last-child{border-bottom:none}
+.s-rank{font-family:var(--mono);font-size:11px;color:var(--muted);min-width:18px}
+.s-bar-wrap{width:70px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.s-bar{height:100%;border-radius:2px}
+.s-rs{font-family:var(--mono);font-size:12px;min-width:46px;text-align:right}
+
+.pos{color:var(--green)}.neg{color:var(--red)}.neu{color:var(--muted)}
+#loading{text-align:center;padding:5rem;font-family:var(--mono);color:var(--muted)}
+.spinner{width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#error{display:none;background:#3d0a0a;border:1px solid var(--red);border-radius:10px;padding:12px 16px;font-family:var(--mono);font-size:12px;color:var(--red);margin-bottom:1rem}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="logo">Market<span>Regime</span></div>
+    <div class="meta" id="metaBar"><span class="live"></span>loading...</div>
+  </header>
+  <div id="error"></div>
+  <div id="loading"><div class="spinner"></div><br>Loading...</div>
+  <div id="app" style="display:none">
+    <div class="regime-hero" id="hero"></div>
+    <div class="scores-grid" id="scores"></div>
+    <div id="maRow" class="ma-row"></div>
+    <div id="alerts" class="alerts"></div>
+    <div id="flowNotice" class="flow-notice" style="display:none"></div>
+
+    <div id="assetRegionRow" class="grid2" style="display:none">
+      <div class="card">
+        <div class="card-title">asset class flow</div>
+        <div class="card-sub" id="assetSub"></div>
+        <div id="assetFlows"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">equity region flow</div>
+        <div class="card-sub">4-week net flow · top inflow → outflow</div>
+        <div id="regionFlows"></div>
+      </div>
+    </div>
+
+    <div id="countryRow" style="display:none" class="grid2">
+      <div class="card">
+        <div class="card-title">country ETF flow (4W)</div>
+        <div class="card-sub">top 10 inflow / top 10 outflow</div>
+        <div class="flow-split">
+          <div><div class="flow-half-title in">top inflow</div><div id="countryIn"></div></div>
+          <div><div class="flow-half-title out">top outflow</div><div id="countryOut"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">country signals (price)</div>
+        <div class="card-sub">MA · momentum · RS vs SPY</div>
+        <div id="countries"></div>
+      </div>
+    </div>
+
+    <div id="commSectRow" class="grid2" style="display:none">
+      <div class="card">
+        <div class="card-title">commodity flow (4W)</div>
+        <div class="card-sub">top 10 inflow / top 10 outflow</div>
+        <div class="flow-split">
+          <div><div class="flow-half-title in">top inflow</div><div id="commIn"></div></div>
+          <div><div class="flow-half-title out">top outflow</div><div id="commOut"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">sector / theme flow (4W)</div>
+        <div class="card-sub">top 10 inflow / top 10 outflow</div>
+        <div class="flow-split">
+          <div><div class="flow-half-title in">top inflow</div><div id="sectIn"></div></div>
+          <div><div class="flow-half-title out">top outflow</div><div id="sectOut"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">sector leadership (price RS)</div>
+        <div id="sectors"></div>
+      </div>
+      <div class="card" id="tickerFlowCard" style="display:none">
+        <div class="card-title">top ETF flow (4W)</div>
+        <div class="card-sub">top 10 inflow / top 10 outflow — all ETFs</div>
+        <div class="flow-split">
+          <div><div class="flow-half-title in">top inflow</div><div id="tickerIn"></div></div>
+          <div><div class="flow-half-title out">top outflow</div><div id="tickerOut"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA_URL="data/latest.json";
+let D=null;
+const sc=v=>v>=0?"pos":"neg";
+const fmt=(v,d=1)=>(v>=0?"+":"")+v.toFixed(d)+"%";
+const fmtB=v=>{const a=Math.abs(v);return (v>=0?"+":"-")+"$"+(a>=1000?(a/1000).toFixed(1)+"B":a.toFixed(0)+"M")};
+const sColor=s=>s>=65?"#00d4a0":s>=45?"#4d9fff":s<25?"#ff5555":"#f0a500";
+const maCls=s=>s==="bullish"?"bullish":s==="bearish"?"bearish":"neutral";
+
+async function load(){
+  try{
+    const r=await fetch(DATA_URL+"?t="+Date.now());
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    D=await r.json();render();
+  }catch(e){
+    document.getElementById("loading").style.display="none";
+    const el=document.getElementById("error");
+    el.style.display="block";
+    el.textContent="Cannot load data/latest.json — run GitHub Actions first.";
+  }
+}
+
+function render(){
+  document.getElementById("loading").style.display="none";
+  document.getElementById("app").style.display="block";
+  const ts=D.generated_at.replace("T"," ").slice(0,16)+" UTC";
+  const flowInfo=D.flow_updated
+    ?`${D.n_asset_classes} asset classes · ${D.n_flow_tickers} ETFs`+(D.flow_date?` · data: ${D.flow_date}`:"")
+    :"price-only mode";
+  document.getElementById("metaBar").innerHTML=`<span class="live"></span>${ts}<br>Flow: ${flowInfo}`;
+  renderHero();renderScores();renderMA();renderAlerts();
+  renderAssetRegion();renderCountry();renderCommSect();renderSectors();renderTickerFlow();
+}
+
+function renderHero(){
+  const r=D.regime;
+  const c=sColor(r.adjusted||r.composite);
+  const vc=D.vol_modifier>=1?"#00d4a0":D.vol_modifier>=0.8?"#f0a500":"#ff5555";
+  const strat=D.strategy.map(s=>`<span>${s}</span>`).join("");
+  document.getElementById("hero").innerHTML=`
+    <div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px;letter-spacing:.08em">MARKET REGIME</div>
+      <div class="regime-label">${r.label}</div>
+      <div class="strat" style="margin-top:8px">${strat}</div>
+    </div>
+    <div class="score-col">
+      <div class="lbl">COMPOSITE</div>
+      <div class="val" style="color:${c}">${(r.adjusted||r.composite).toFixed(0)}</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px">/ 100 (vol-adjusted)</div>
+    </div>
+    <div class="vol-col">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px;letter-spacing:.08em">VOLATILITY</div>
+      <div class="vix" style="color:${vc}">VIX ${D.vix||"—"}</div>
+      <div class="vlbl">${D.vol_label||"—"}</div>
+    </div>`;
+}
+
+function renderScores(){
+  const s=D.regime.scores;
+  const interp={
+    growth:   s.growth>65?"Growth regime":s.growth<35?"Value regime":"Neutral",
+    risk:     s.risk>65?"Risk-on":s.risk<35?"Risk-off":"Neutral",
+    inflation:s.inflation>65?"Inflation":s.inflation<35?"Disinflation":"Neutral",
+    liquidity:s.liquidity>65?"Easing":s.liquidity<35?"Tightening":"Neutral",
+    sector:   s.sector>65?"Strong leadership":"Mixed",
+  };
+  document.getElementById("scores").innerHTML=Object.entries(s).map(([k,v])=>{
+    const c=sColor(v);
+    return`<div class="sc">
+      <div class="sc-name">${k}</div>
+      <div class="sc-val" style="color:${c}">${v.toFixed(0)}</div>
+      <div class="sc-track"><div class="sc-fill" style="width:${v}%;background:${c}"></div></div>
+      <div class="sc-interp">${interp[k]}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderMA(){
+  document.getElementById("maRow").innerHTML=Object.entries(D.ma_signals).map(([t,s])=>
+    `<div class="ma-pill ${maCls(s)}">
+      <div class="ma-dot ${maCls(s)}"></div>
+      <span style="font-weight:500">${t}</span>
+      <span style="color:var(--muted)">${s}</span>
+    </div>`).join("");
+}
+
+function renderAlerts(){
+  const el=document.getElementById("alerts");
+  if(!D.alerts.length){el.style.display="none";return;}
+  const icons={alert:"⚠",warning:"◈",info:"◉"};
+  el.innerHTML=D.alerts.map(a=>`<div class="alert ${a.level}"><span>${icons[a.level]||"·"}</span><span>${a.msg}</span></div>`).join("");
+}
+
+function flowRows(arr, n=10){
+  if(!arr||!arr.length) return '<div style="color:var(--muted);font-size:11px;padding:4px 0">no data</div>';
+  const maxAbs=Math.max(...arr.slice(0,n).map(x=>Math.abs(x.flow_4w_mn)),1);
+  return arr.slice(0,n).map(x=>{
+    const pos=x.flow_4w_mn>=0;
+    const w=Math.abs(x.flow_4w_mn)/maxAbs*100;
+    return`<div class="fr">
+      <div class="fr-name">${x.name||x.ticker}</div>
+      <div class="fr-bar-wrap"><div class="fr-bar" style="width:${w}%;background:${pos?"var(--green)":"var(--red)"}"></div></div>
+      <div class="fr-val ${pos?"pos":"neg"}">${fmtB(x.flow_4w_mn)}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderAssetRegion(){
+  const af=D.asset_flows||{};const rf=D.region_flows||{};
+  if(!D.flow_updated||(!Object.keys(af).length&&!Object.keys(rf).length)){
+    document.getElementById("flowNotice").style.display="block";
+    document.getElementById("flowNotice").innerHTML=
+      `<strong>Flow data not loaded.</strong> Download CSVs from etfdb.com → rename as <code>equity_YYYY-MM-DD.csv</code>, <code>bond_YYYY-MM-DD.csv</code> etc. → place in <code>data/flows/</code>`;
+    return;
+  }
+  document.getElementById("assetRegionRow").style.display="grid";
+  const afArr=Object.entries(af).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
+  const maxAF=Math.max(...afArr.map(x=>Math.abs(x.flow_4w_mn)),1);
+  document.getElementById("assetSub").textContent=`4-week net flow · ${afArr.length} asset classes`;
+  document.getElementById("assetFlows").innerHTML=afArr.map(f=>{
+    const pos=f.flow_4w_mn>=0;
+    const w=Math.abs(f.flow_4w_mn)/maxAF*100;
+    return`<div class="fr">
+      <div class="fr-name">${f.name}</div>
+      <div style="font-size:10px;color:var(--muted);min-width:28px;font-family:var(--mono)">${f.n_etfs}e</div>
+      <div class="fr-bar-wrap" style="width:80px"><div class="fr-bar" style="width:${w}%;background:${pos?"var(--green)":"var(--red)"}"></div></div>
+      <div class="fr-val ${pos?"pos":"neg"}">${fmtB(f.flow_4w_mn)}</div>
+    </div>`;
+  }).join("");
+  const rfArr=Object.entries(rf).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
+  const maxRF=Math.max(...rfArr.map(x=>Math.abs(x.flow_4w_mn)),1);
+  document.getElementById("regionFlows").innerHTML=rfArr.map(f=>{
+    const pos=f.flow_4w_mn>=0;
+    const w=Math.abs(f.flow_4w_mn)/maxRF*100;
+    return`<div class="fr">
+      <div class="fr-name">${f.name}</div>
+      <div class="fr-bar-wrap" style="width:80px"><div class="fr-bar" style="width:${w}%;background:${pos?"var(--green)":"var(--red)"}"></div></div>
+      <div class="fr-val ${pos?"pos":"neg"}">${fmtB(f.flow_4w_mn)}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderCountry(){
+  const cf=D.country_flows||[];
+  if(!cf.length) return;
+  document.getElementById("countryRow").style.display="grid";
+  const inflow =cf.filter(x=>x.flow_4w_mn>0).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
+  const outflow=cf.filter(x=>x.flow_4w_mn<=0).sort((a,b)=>a.flow_4w_mn-b.flow_4w_mn);
+  document.getElementById("countryIn").innerHTML=flowRows(inflow,10);
+  document.getElementById("countryOut").innerHTML=flowRows(outflow,10);
+  const tf=D.ticker_flows||{};
+  document.getElementById("countries").innerHTML=D.countries.map(c=>{
+    const ma=maCls(c.ma_signal);
+    const fl=tf[c.ticker];
+    const flowHtml=fl?`<div class="c-val ${fl.flow_4w_mn>=0?"pos":"neg"}" style="min-width:64px">${fmtB(fl.flow_4w_mn)}</div>`
+                     :`<div class="c-val neu" style="min-width:64px">—</div>`;
+    return`<div class="c-row">
+      <div style="font-size:15px;min-width:20px">${c.name.split(" ")[0]}</div>
+      <div style="flex:1;font-size:13px">${c.name.split(" ").slice(1).join(" ")}</div>
+      <div class="c-val ${sc(c.ret_1m)}">${fmt(c.ret_1m)}</div>
+      <div class="c-val neu" style="font-size:11px">RS${fmt(c.rs_vs_spy,1)}</div>
+      <div class="c-ma ${ma}">${c.ma_signal}</div>
+      ${flowHtml}
+    </div>`;
+  }).join("");
+}
+
+function renderCommSect(){
+  const cf=D.commodity_flows||[];
+  const sf=D.sector_flows||[];
+  if(!cf.length&&!sf.length) return;
+  document.getElementById("commSectRow").style.display="grid";
+  const cIn =cf.filter(x=>x.flow_4w_mn>0).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
+  const cOut=cf.filter(x=>x.flow_4w_mn<=0).sort((a,b)=>a.flow_4w_mn-b.flow_4w_mn);
+  document.getElementById("commIn").innerHTML=flowRows(cIn,10);
+  document.getElementById("commOut").innerHTML=flowRows(cOut,10);
+  const sIn =sf.filter(x=>x.flow_4w_mn>0).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
+  const sOut=sf.filter(x=>x.flow_4w_mn<=0).sort((a,b)=>a.flow_4w_mn-b.flow_4w_mn);
+  document.getElementById("sectIn").innerHTML=flowRows(sIn,10);
+  document.getElementById("sectOut").innerHTML=flowRows(sOut,10);
+}
+
+function renderSectors(){
+  const mx=Math.max(...D.sectors.map(s=>Math.abs(s.rs)),1);
+  document.getElementById("sectors").innerHTML=D.sectors.map((s,i)=>{
+    const pos=s.rs>=0;
+    return`<div class="s-row">
+      <div class="s-rank">${i+1}</div>
+      <div style="flex:1;font-size:13px">${s.name}</div>
+      <div class="s-bar-wrap"><div class="s-bar" style="width:${Math.abs(s.rs)/mx*100}%;background:${pos?"var(--green)":"var(--red)"}"></div></div>
+      <div class="s-rs ${pos?"pos":"neg"}">${fmt(s.rs,1)}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderTickerFlow(){
+  const tf=D.ticker_flows||{};
+  if(!Object.keys(tf).length) return;
+  document.getElementById("tickerFlowCard").style.display="block";
+  const arr=Object.entries(tf).map(([t,v])=>({ticker:t,name:t,...v}));
+  const inflow =arr.filter(x=>x.flow_4w_mn>0).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
+  const outflow=arr.filter(x=>x.flow_4w_mn<=0).sort((a,b)=>a.flow_4w_mn-b.flow_4w_mn);
+  document.getElementById("tickerIn").innerHTML=flowRows(inflow,10);
+  document.getElementById("tickerOut").innerHTML=flowRows(outflow,10);
+}
+
+load();
+</script>
+</body>
+</html>
