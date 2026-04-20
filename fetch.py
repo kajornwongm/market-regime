@@ -375,6 +375,11 @@ def main():
     adjusted=round(composite*v_mult,1)
     regime_label=classify_regime(scores,adjusted)
 
+    delta      = compute_delta(scores, prev_scores)
+    confidence = compute_confidence(scores, vix, bool(asset_flows or ticker_flows))
+    action     = build_action_panel(scores, regime_label, adjusted, confidence,
+                                    delta, sect_ranking, country_flows, ticker_flows, vix)
+
     output={
         "generated_at":    datetime.utcnow().isoformat()+"Z",
         "flow_date":        flow_date,
@@ -389,7 +394,10 @@ def main():
             "composite": round(composite,1),
             "adjusted":  adjusted,
             "scores":    {k:round(v,1) for k,v in scores.items()},
+            "delta":     delta,
         },
+        "confidence":       confidence,
+        "action":           action,
         "strategy":         get_strategy(regime_label),
         "alerts":           generate_alerts(scores,composite,adjusted,vix,v_label,
                                              sect_ranking,asset_flows,ticker_flows,prev_scores),
@@ -415,3 +423,83 @@ def main():
 
 if __name__=="__main__":
     main()
+
+# ── Delta, Confidence, Action Panel ─────────────────────────────────────────
+def compute_delta(scores, prev_scores):
+    if not prev_scores:
+        return {k: 0.0 for k in scores}
+    return {k: round(scores[k] - prev_scores.get(k, scores[k]), 1) for k in scores}
+
+def compute_confidence(scores, vix, flow_updated):
+    signals = []
+    risk_bull = scores["risk"] > 60
+    risk_bear = scores["risk"] < 40
+    vol_calm  = vix < 22
+    vol_fear  = vix > 28
+    liq_easy  = scores["liquidity"] > 55
+    liq_tight = scores["liquidity"] < 45
+    if risk_bull:
+        signals.extend([1, 1 if vol_calm else -1, 1 if liq_easy else 0])
+    elif risk_bear:
+        signals.extend([-1, -1 if vol_fear else 1, -1 if liq_tight else 0])
+    else:
+        signals.extend([0, 0, 0])
+    if scores["growth"] > 60 and risk_bull:
+        signals.append(1)
+    elif scores["growth"] < 40 and risk_bear:
+        signals.append(-1)
+    else:
+        signals.append(0)
+    if not signals:
+        return 50.0
+    alignment = abs(sum(signals)) / len(signals)
+    base = 40 + alignment * 50
+    if flow_updated:
+        base = min(base + 10, 95)
+    return round(base, 0)
+
+def build_action_panel(scores, regime_label, adjusted, confidence,
+                       delta, sect_ranking, country_flows, ticker_flows, vix):
+    overweight, underweight, watch, ideas = [], [], [], []
+    if scores["inflation"] > 65:
+        overweight += ["XLE","GLD","DBC"]
+        underweight += ["QQQ","TLT"]
+    if scores["growth"] > 65 and scores["risk"] > 60:
+        overweight += ["QQQ","XLK"]
+        underweight += ["XLU","TLT"]
+    if scores["risk"] < 40:
+        overweight += ["TLT","SHY","GLD"]
+        underweight += ["SPY","QQQ"]
+    if scores["liquidity"] > 65:
+        overweight += ["VNQ","XLF"]
+    if scores["liquidity"] < 35:
+        underweight += ["VNQ","XLF"]
+        watch += ["Cash buffer ≥ 30%"]
+    for c in (country_flows or [])[:3]:
+        if c["flow_4w_mn"] > 100:
+            ideas.append(f"Watch {c['ticker']} ({c['name'].split(' ',1)[-1]}) — inflow ${c['flow_4w_mn']:.0f}M")
+    if sect_ranking and sect_ranking[0]["rs"] > 2:
+        top_s = sect_ranking[0]
+        ideas.append(f"Sector leader: {top_s['name']} RS +{top_s['rs']:.1f}%")
+    if vix > 28:
+        ideas.append("VIX elevated — size down, wait for vol compression")
+    elif vix < 16 and adjusted > 70:
+        ideas.append("Low vol + high score — clean trend, full size justified")
+    rising  = [k for k,v in delta.items() if v >= 10]
+    falling = [k for k,v in delta.items() if v <= -10]
+    narrative = []
+    if rising:
+        narrative.append(f"{', '.join(r.title() for r in rising)} rising — momentum building")
+    if falling:
+        narrative.append(f"{', '.join(f.title() for f in falling)} falling — watch regime shift")
+    if not rising and not falling:
+        narrative.append("Scores stable — no major regime change detected")
+    return {
+        "overweight":  list(dict.fromkeys(overweight))[:5],
+        "underweight": list(dict.fromkeys(underweight))[:5],
+        "watch":       watch[:3],
+        "ideas":       ideas[:5],
+        "narrative":   narrative[:2],
+        "confidence":  confidence,
+        "bias":        "bullish" if adjusted > 60 else ("bearish" if adjusted < 40 else "neutral"),
+    }
