@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-20T07:01:14.485148Z",
+  "generated_at": "2026-04-20T07:28:22.527358Z",
   "flow_date": "2026-04-19",
   "flow_updated": true,
   "n_flow_tickers": 4759,
-  "n_asset_classes": 3,
+  "n_asset_classes": 5,
   "vix": 17.5,
   "vol_modifier": 1.0,
   "vol_label": "low (\u00d71.0)",
@@ -40,6 +40,14 @@
       "n_inflow": 567,
       "n_outflow": 230
     },
+    "Commodity": {
+      "flow_1w_mn": 1847.0,
+      "flow_4w_mn": -4246.0,
+      "flow_ytd_mn": 4678.0,
+      "n_etfs": 100,
+      "n_inflow": 49,
+      "n_outflow": 34
+    },
     "Currency": {
       "flow_1w_mn": 1113.0,
       "flow_4w_mn": 802.0,
@@ -55,6 +63,14 @@
       "n_etfs": 3468,
       "n_inflow": 1644,
       "n_outflow": 1067
+    },
+    "Real Estate": {
+      "flow_1w_mn": -381.0,
+      "flow_4w_mn": -673.0,
+      "flow_ytd_mn": -57.0,
+      "n_etfs": 42,
+      "n_inflow": 13,
+      "n_outflow": 16
     }
   },
   "region_flows": {
@@ -555,7 +571,248 @@
       "direction": "outflow"
     }
   ],
-  "commodity_flows": [],
+  "commodity_flows": [
+    {
+      "ticker": "GLDM",
+      "name": "SPDR Gold Minishares Trust of ",
+      "flow_4w_mn": 631.4,
+      "flow_1w_mn": 581.3,
+      "flow_ytd_mn": 3296.4,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "SCO",
+      "name": "ProShares UltraShort Bloomberg",
+      "flow_4w_mn": 607.0,
+      "flow_1w_mn": 79.1,
+      "flow_ytd_mn": 1235.7,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "BNO",
+      "name": "United States Brent Oil Fund L",
+      "flow_4w_mn": 493.7,
+      "flow_1w_mn": 76.0,
+      "flow_ytd_mn": 700.3,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "HGER",
+      "name": "Harbor Commodity All-Weather S",
+      "flow_4w_mn": 470.8,
+      "flow_1w_mn": -22.6,
+      "flow_ytd_mn": 958.4,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "DBA",
+      "name": "Invesco DB Agriculture Fund",
+      "flow_4w_mn": 391.2,
+      "flow_1w_mn": 8.3,
+      "flow_ytd_mn": 445.6,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "PDBC",
+      "name": "Invesco Optimum Yield Diversif",
+      "flow_4w_mn": 257.4,
+      "flow_1w_mn": 134.6,
+      "flow_ytd_mn": 638.5,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "CORN",
+      "name": "Teucrium Corn Fund",
+      "flow_4w_mn": 191.3,
+      "flow_1w_mn": -8.1,
+      "flow_ytd_mn": 241.4,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "FTGC",
+      "name": "First Trust Global Tactical Co",
+      "flow_4w_mn": 150.6,
+      "flow_1w_mn": 56.1,
+      "flow_ytd_mn": 328.0,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "AGQ",
+      "name": "ProShares Ultra Silver",
+      "flow_4w_mn": 146.2,
+      "flow_1w_mn": -126.2,
+      "flow_ytd_mn": 793.6,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "PDBA",
+      "name": "Invesco Agriculture Commodity ",
+      "flow_4w_mn": 104.3,
+      "flow_1w_mn": 12.7,
+      "flow_ytd_mn": 151.5,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "BOIL",
+      "name": "ProShares Ultra Bloomberg Natu",
+      "flow_4w_mn": 101.3,
+      "flow_1w_mn": 9.1,
+      "flow_ytd_mn": 44.4,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "DBC",
+      "name": "Invesco DB Commodity Index Tra",
+      "flow_4w_mn": 98.1,
+      "flow_1w_mn": 66.0,
+      "flow_ytd_mn": 191.4,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "COM",
+      "name": "Direxion Auspice Broad Commodi",
+      "flow_4w_mn": 77.1,
+      "flow_1w_mn": 28.3,
+      "flow_ytd_mn": 72.6,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "WEAT",
+      "name": "Teucrium Wheat Fund",
+      "flow_4w_mn": 74.0,
+      "flow_1w_mn": -9.0,
+      "flow_ytd_mn": 148.1,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "OILK",
+      "name": "ProShares K-1 Free Crude Oil E",
+      "flow_4w_mn": 69.7,
+      "flow_1w_mn": -0.2,
+      "flow_ytd_mn": 141.9,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "CANE",
+      "name": "Teucrium Sugar Fund",
+      "flow_4w_mn": 65.7,
+      "flow_1w_mn": 2.4,
+      "flow_ytd_mn": 73.7,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "CMDT",
+      "name": "PIMCO Commodity Strategy Activ",
+      "flow_4w_mn": 45.6,
+      "flow_1w_mn": 4.9,
+      "flow_ytd_mn": 42.1,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "PIT",
+      "name": "VanEck Commodity Strategy ETF",
+      "flow_4w_mn": 35.7,
+      "flow_1w_mn": 10.7,
+      "flow_ytd_mn": 104.3,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "SDCI",
+      "name": "USCF SummerHaven Dynamic Commo",
+      "flow_4w_mn": 31.5,
+      "flow_1w_mn": 8.8,
+      "flow_ytd_mn": 158.8,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "DBE",
+      "name": "Invesco DB Energy Fund",
+      "flow_4w_mn": 26.9,
+      "flow_1w_mn": 12.3,
+      "flow_ytd_mn": 29.4,
+      "direction": "inflow"
+    },
+    {
+      "ticker": "PALL",
+      "name": "abrdn Physical Palladium Share",
+      "flow_4w_mn": -97.5,
+      "flow_1w_mn": 21.8,
+      "flow_ytd_mn": -155.3,
+      "direction": "outflow"
+    },
+    {
+      "ticker": "IAUM",
+      "name": "iShares Gold Trust Micro ETF o",
+      "flow_4w_mn": -109.1,
+      "flow_1w_mn": 32.4,
+      "flow_ytd_mn": 841.8,
+      "direction": "outflow"
+    },
+    {
+      "ticker": "CPER",
+      "name": "United States Copper Index Fun",
+      "flow_4w_mn": -136.0,
+      "flow_1w_mn": -19.1,
+      "flow_ytd_mn": 251.3,
+      "direction": "outflow"
+    },
+    {
+      "ticker": "KOLD",
+      "name": "ProShares UltraShort Bloomberg",
+      "flow_4w_mn": -159.6,
+      "flow_1w_mn": -27.1,
+      "flow_ytd_mn": 234.2,
+      "direction": "outflow"
+    },
+    {
+      "ticker": "PPLT",
+      "name": "abrdn Physical Platinum Shares",
+      "flow_4w_mn": -252.1,
+      "flow_1w_mn": 0.0,
+      "flow_ytd_mn": -290.6,
+      "direction": "outflow"
+    },
+    {
+      "ticker": "SIVR",
+      "name": "abrdn Physical Silver Shares E",
+      "flow_4w_mn": -286.9,
+      "flow_1w_mn": 33.8,
+      "flow_ytd_mn": -589.9,
+      "direction": "outflow"
+    },
+    {
+      "ticker": "SLV",
+      "name": "iShares Silver Trust",
+      "flow_4w_mn": -626.2,
+      "flow_1w_mn": 101.0,
+      "flow_ytd_mn": -2771.8,
+      "direction": "outflow"
+    },
+    {
+      "ticker": "USO",
+      "name": "United States Oil Fund LP",
+      "flow_4w_mn": -749.1,
+      "flow_1w_mn": 221.0,
+      "flow_ytd_mn": 296.8,
+      "direction": "outflow"
+    },
+    {
+      "ticker": "IAU",
+      "name": "iShares Gold Trust",
+      "flow_4w_mn": -2044.8,
+      "flow_1w_mn": 394.1,
+      "flow_ytd_mn": -1926.6,
+      "direction": "outflow"
+    },
+    {
+      "ticker": "GLD",
+      "name": "SPDR Gold Shares",
+      "flow_4w_mn": -3611.4,
+      "flow_1w_mn": 211.6,
+      "flow_ytd_mn": -2674.1,
+      "direction": "outflow"
+    }
+  ],
   "sectors": [
     {
       "ticker": "XLK",
