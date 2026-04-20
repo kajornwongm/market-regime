@@ -63,6 +63,9 @@ header{display:flex;align-items:flex-end;justify-content:space-between;margin-bo
 
 .flow-notice{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:1.25rem}
 .flow-notice strong{color:var(--amber)}
+.period-btn{font-family:var(--mono);font-size:11px;padding:4px 12px;border-radius:6px;border:1px solid var(--border2);background:var(--bg2);color:var(--muted);cursor:pointer;transition:all .15s}
+.period-btn:hover{border-color:var(--border2);color:var(--text)}
+.period-btn.active{background:rgba(0,212,160,.12);border-color:rgba(0,212,160,.3);color:var(--green)}
 
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
@@ -114,6 +117,14 @@ header{display:flex;align-items:flex-end;justify-content:space-between;margin-bo
     <div id="maRow" class="ma-row"></div>
     <div id="alerts" class="alerts"></div>
     <div id="flowNotice" class="flow-notice" style="display:none"></div>
+
+    <div id="periodRow" style="display:none;margin-bottom:1.25rem;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Flow period:</span>
+      <button class="period-btn active" data-p="flow_4w_mn">4 weeks</button>
+      <button class="period-btn" data-p="flow_1w_mn">1 week</button>
+      <button class="period-btn" data-p="flow_ytd_mn">YTD</button>
+      <button class="period-btn" data-p="flow_1y_mn">1 year</button>
+    </div>
 
     <div id="assetRegionRow" class="grid2" style="display:none">
       <div class="card">
@@ -183,6 +194,8 @@ header{display:flex;align-items:flex-end;justify-content:space-between;margin-bo
 <script>
 const DATA_URL="data/latest.json";
 let D=null;
+let PERIOD="flow_4w_mn";
+const PERIOD_LABEL={"flow_4w_mn":"4W","flow_1w_mn":"1W","flow_ytd_mn":"YTD","flow_1y_mn":"1Y"};
 const sc=v=>v>=0?"pos":"neg";
 const fmt=(v,d=1)=>(v>=0?"+":"")+v.toFixed(d)+"%";
 const fmtB=v=>{const a=Math.abs(v);return (v>=0?"+":"-")+"$"+(a>=1000?(a/1000).toFixed(1)+"B":a.toFixed(0)+"M")};
@@ -211,7 +224,11 @@ function render(){
     :"price-only mode";
   document.getElementById("metaBar").innerHTML=`<span class="live"></span>${ts}<br>Flow: ${flowInfo}`;
   renderHero();renderScores();renderMA();renderAlerts();
-  renderAssetRegion();renderCountry();renderCommSect();renderSectors();renderTickerFlow();
+  renderFlowSections();renderSectors();renderTickerFlow();
+}
+
+function renderFlowSections(){
+  renderAssetRegion();renderCountry();renderCommSect();
 }
 
 function renderHero(){
@@ -275,14 +292,20 @@ function renderAlerts(){
 
 function flowRows(arr, n=10){
   if(!arr||!arr.length) return '<div style="color:var(--muted);font-size:11px;padding:4px 0">no data</div>';
-  const maxAbs=Math.max(...arr.slice(0,n).map(x=>Math.abs(x.flow_4w_mn)),1);
-  return arr.slice(0,n).map(x=>{
-    const pos=x.flow_4w_mn>=0;
-    const w=Math.abs(x.flow_4w_mn)/maxAbs*100;
+  const sorted=[...arr].sort((a,b)=>{
+    const av=a[PERIOD]??a.flow_4w_mn??0;
+    const bv=b[PERIOD]??b.flow_4w_mn??0;
+    return Math.abs(bv)-Math.abs(av);
+  });
+  const maxAbs=Math.max(...sorted.slice(0,n).map(x=>Math.abs(x[PERIOD]??x.flow_4w_mn??0)),1);
+  return sorted.slice(0,n).map(x=>{
+    const v=x[PERIOD]??x.flow_4w_mn??0;
+    const pos=v>=0;
+    const w=Math.abs(v)/maxAbs*100;
     return`<div class="fr">
       <div class="fr-name">${x.name||x.ticker}</div>
       <div class="fr-bar-wrap"><div class="fr-bar" style="width:${w}%;background:${pos?"var(--green)":"var(--red)"}"></div></div>
-      <div class="fr-val ${pos?"pos":"neg"}">${fmtB(x.flow_4w_mn)}</div>
+      <div class="fr-val ${pos?"pos":"neg"}">${fmtB(v)}</div>
     </div>`;
   }).join("");
 }
@@ -295,29 +318,35 @@ function renderAssetRegion(){
       `<strong>Flow data not loaded.</strong> Download CSVs from etfdb.com → rename as <code>equity_YYYY-MM-DD.csv</code>, <code>bond_YYYY-MM-DD.csv</code> etc. → place in <code>data/flows/</code>`;
     return;
   }
+  document.getElementById("periodRow").style.display="flex";
   document.getElementById("assetRegionRow").style.display="grid";
-  const afArr=Object.entries(af).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
-  const maxAF=Math.max(...afArr.map(x=>Math.abs(x.flow_4w_mn)),1);
-  document.getElementById("assetSub").textContent=`4-week net flow · ${afArr.length} asset classes`;
+  const pLabel=PERIOD_LABEL[PERIOD]||"4W";
+  const afArr=Object.entries(af).map(([k,v])=>({name:k,...v}))
+    .sort((a,b)=>(b[PERIOD]??b.flow_4w_mn??0)-(a[PERIOD]??a.flow_4w_mn??0));
+  const maxAF=Math.max(...afArr.map(x=>Math.abs(x[PERIOD]??x.flow_4w_mn??0)),1);
+  document.getElementById("assetSub").textContent=`${pLabel} net flow · ${afArr.length} asset classes`;
   document.getElementById("assetFlows").innerHTML=afArr.map(f=>{
-    const pos=f.flow_4w_mn>=0;
-    const w=Math.abs(f.flow_4w_mn)/maxAF*100;
+    const v=f[PERIOD]??f.flow_4w_mn??0;
+    const pos=v>=0;
+    const w=Math.abs(v)/maxAF*100;
     return`<div class="fr">
       <div class="fr-name">${f.name}</div>
       <div style="font-size:10px;color:var(--muted);min-width:28px;font-family:var(--mono)">${f.n_etfs}e</div>
       <div class="fr-bar-wrap" style="width:80px"><div class="fr-bar" style="width:${w}%;background:${pos?"var(--green)":"var(--red)"}"></div></div>
-      <div class="fr-val ${pos?"pos":"neg"}">${fmtB(f.flow_4w_mn)}</div>
+      <div class="fr-val ${pos?"pos":"neg"}">${fmtB(v)}</div>
     </div>`;
   }).join("");
-  const rfArr=Object.entries(rf).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
-  const maxRF=Math.max(...rfArr.map(x=>Math.abs(x.flow_4w_mn)),1);
+  const rfArr=Object.entries(rf).map(([k,v])=>({name:k,...v}))
+    .sort((a,b)=>(b[PERIOD]??b.flow_4w_mn??0)-(a[PERIOD]??a.flow_4w_mn??0));
+  const maxRF=Math.max(...rfArr.map(x=>Math.abs(x[PERIOD]??x.flow_4w_mn??0)),1);
   document.getElementById("regionFlows").innerHTML=rfArr.map(f=>{
-    const pos=f.flow_4w_mn>=0;
-    const w=Math.abs(f.flow_4w_mn)/maxRF*100;
+    const v=f[PERIOD]??f.flow_4w_mn??0;
+    const pos=v>=0;
+    const w=Math.abs(v)/maxRF*100;
     return`<div class="fr">
       <div class="fr-name">${f.name}</div>
       <div class="fr-bar-wrap" style="width:80px"><div class="fr-bar" style="width:${w}%;background:${pos?"var(--green)":"var(--red)"}"></div></div>
-      <div class="fr-val ${pos?"pos":"neg"}">${fmtB(f.flow_4w_mn)}</div>
+      <div class="fr-val ${pos?"pos":"neg"}">${fmtB(v)}</div>
     </div>`;
   }).join("");
 }
@@ -326,8 +355,9 @@ function renderCountry(){
   const cf=D.country_flows||[];
   if(!cf.length) return;
   document.getElementById("countryRow").style.display="grid";
-  const inflow =cf.filter(x=>x.flow_4w_mn>0).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
-  const outflow=cf.filter(x=>x.flow_4w_mn<=0).sort((a,b)=>a.flow_4w_mn-b.flow_4w_mn);
+  const sorted=[...cf].sort((a,b)=>(b[PERIOD]??b.flow_4w_mn??0)-(a[PERIOD]??a.flow_4w_mn??0));
+  const inflow =sorted.filter(x=>(x[PERIOD]??x.flow_4w_mn??0)>0);
+  const outflow=sorted.filter(x=>(x[PERIOD]??x.flow_4w_mn??0)<=0).reverse();
   document.getElementById("countryIn").innerHTML=flowRows(inflow,10);
   document.getElementById("countryOut").innerHTML=flowRows(outflow,10);
   const tf=D.ticker_flows||{};
@@ -352,12 +382,14 @@ function renderCommSect(){
   const sf=D.sector_flows||[];
   if(!cf.length&&!sf.length) return;
   document.getElementById("commSectRow").style.display="grid";
-  const cIn =cf.filter(x=>x.flow_4w_mn>0).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
-  const cOut=cf.filter(x=>x.flow_4w_mn<=0).sort((a,b)=>a.flow_4w_mn-b.flow_4w_mn);
+  const cSorted=[...cf].sort((a,b)=>(b[PERIOD]??b.flow_4w_mn??0)-(a[PERIOD]??a.flow_4w_mn??0));
+  const cIn =cSorted.filter(x=>(x[PERIOD]??x.flow_4w_mn??0)>0);
+  const cOut=cSorted.filter(x=>(x[PERIOD]??x.flow_4w_mn??0)<=0).reverse();
   document.getElementById("commIn").innerHTML=flowRows(cIn,10);
   document.getElementById("commOut").innerHTML=flowRows(cOut,10);
-  const sIn =sf.filter(x=>x.flow_4w_mn>0).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
-  const sOut=sf.filter(x=>x.flow_4w_mn<=0).sort((a,b)=>a.flow_4w_mn-b.flow_4w_mn);
+  const sSorted=[...sf].sort((a,b)=>(b[PERIOD]??b.flow_4w_mn??0)-(a[PERIOD]??a.flow_4w_mn??0));
+  const sIn =sSorted.filter(x=>(x[PERIOD]??x.flow_4w_mn??0)>0);
+  const sOut=sSorted.filter(x=>(x[PERIOD]??x.flow_4w_mn??0)<=0).reverse();
   document.getElementById("sectIn").innerHTML=flowRows(sIn,10);
   document.getElementById("sectOut").innerHTML=flowRows(sOut,10);
 }
@@ -380,13 +412,23 @@ function renderTickerFlow(){
   if(!Object.keys(tf).length) return;
   document.getElementById("tickerFlowCard").style.display="block";
   const arr=Object.entries(tf).map(([t,v])=>({ticker:t,name:t,...v}));
-  const inflow =arr.filter(x=>x.flow_4w_mn>0).sort((a,b)=>b.flow_4w_mn-a.flow_4w_mn);
-  const outflow=arr.filter(x=>x.flow_4w_mn<=0).sort((a,b)=>a.flow_4w_mn-b.flow_4w_mn);
+  const sorted=[...arr].sort((a,b)=>(b[PERIOD]??b.flow_4w_mn??0)-(a[PERIOD]??a.flow_4w_mn??0));
+  const inflow =sorted.filter(x=>(x[PERIOD]??x.flow_4w_mn??0)>0);
+  const outflow=sorted.filter(x=>(x[PERIOD]??x.flow_4w_mn??0)<=0).reverse();
   document.getElementById("tickerIn").innerHTML=flowRows(inflow,10);
   document.getElementById("tickerOut").innerHTML=flowRows(outflow,10);
 }
 
 load();
+
+document.addEventListener("click",e=>{
+  const btn=e.target.closest(".period-btn");
+  if(!btn) return;
+  PERIOD=btn.dataset.p;
+  document.querySelectorAll(".period-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  if(D) renderFlowSections();
+});
 </script>
 </body>
 </html>
