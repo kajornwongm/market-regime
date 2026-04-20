@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-20T07:28:22.527358Z",
+  "generated_at": "2026-04-20T09:20:34.102796Z",
   "flow_date": "2026-04-19",
   "flow_updated": true,
   "n_flow_tickers": 4759,
@@ -17,7 +17,31 @@
       "inflation": 43.3,
       "liquidity": 56.7,
       "sector": 54.2
+    },
+    "delta": {
+      "growth": 0.0,
+      "risk": 0.0,
+      "inflation": 0.0,
+      "liquidity": 0.0,
+      "sector": 0.0
     }
+  },
+  "confidence": 88.0,
+  "action": {
+    "overweight": [],
+    "underweight": [],
+    "watch": [],
+    "ideas": [
+      "Watch SPY \u2014 inflow $5010M",
+      "Watch VTI \u2014 inflow $3251M",
+      "Watch EWZ \u2014 inflow $775M",
+      "Sector leader: Technology RS +4.4%"
+    ],
+    "narrative": [
+      "Scores stable \u2014 no major regime change"
+    ],
+    "confidence": 88.0,
+    "bias": "neutral"
   },
   "strategy": [
     "Balanced SPY/TLT",
