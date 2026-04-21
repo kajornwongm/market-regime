@@ -69,6 +69,9 @@ PRICE_TICKERS = [
     "GLD","DBC","XLE","^VIX",
     "EWY","EWJ","INDA","EWZ","VNM","EWT","EWG","EWU",
     "XLK","XLV","XLI","XLU","XAR","XLF","XLB","VNQ","IBIT",
+    "FXI","MCHI","EWA","EWC","EZA","EWW","TUR","THD","IDX",
+    "SMH","SOXX","IBB","XBI","IGV","ARKK","BOTZ","HACK","SKYY","FINX","PAVE",
+    "BIL","SHV","GDX","SLV","USO","ENOR","EWD","EWL","EWP","EWI","EWQ","EWN",
 ]
 
 def get_prices(lookback_days=200):
@@ -421,15 +424,27 @@ def main():
         "bias":        "bullish" if adjusted>60 else ("bearish" if adjusted<40 else "neutral"),
     }
 
+    # EOD prices for portfolio auto-fill
+    eod_prices = {}
+    for t in price.columns:
+        if t.startswith("^"): continue
+        s = price[t].dropna()
+        if len(s): eod_prices[t] = round(float(s.iloc[-1]), 4)
+    price_date = price.index[-1].strftime("%Y-%m-%d") if len(price.index) else ""
+    etf_list = sorted(set(list(eod_prices.keys()) + list(ticker_flows.keys())))
+
     output={
         "generated_at":    datetime.utcnow().isoformat()+"Z",
         "flow_date":        flow_date,
+        "price_date":       price_date,
         "flow_updated":     bool(asset_flows or ticker_flows),
         "n_flow_tickers":   len(ticker_flows),
         "n_asset_classes":  len(asset_flows),
         "vix":              round(vix,1),
         "vol_modifier":     round(v_mult,2),
         "vol_label":        v_label,
+        "eod_prices":       eod_prices,
+        "etf_list":         etf_list,
         "regime":{
             "label":     regime_label,
             "composite": round(composite,1),
