@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-21T01:29:38.249362Z",
+  "generated_at": "2026-04-21T06:12:31.610615Z",
   "flow_date": "2026-04-20",
   "price_date": "2026-04-20",
   "flow_updated": true,
@@ -31,7 +31,7 @@
     "EWY": 150.09,
     "EWZ": 41.3,
     "EZA": 73.7,
-    "FINX": 26.8374,
+    "FINX": 26.837,
     "FXI": 37.66,
     "GDX": 99.13,
     "GLD": 442.09,
@@ -4842,11 +4842,11 @@
       "sector": 56.6
     },
     "delta": {
-      "growth": -0.2,
-      "risk": 2.3,
-      "inflation": 2.2,
-      "liquidity": -0.2,
-      "sector": 2.4
+      "growth": 0.0,
+      "risk": 0.0,
+      "inflation": 0.0,
+      "liquidity": 0.0,
+      "sector": 0.0
     }
   },
   "confidence": 88.0,
