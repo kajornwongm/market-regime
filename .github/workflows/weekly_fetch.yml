@@ -1,0 +1,47 @@
+name: Market Regime Weekly Update
+
+on:
+  schedule:
+    - cron: "0 14 * * 6"   # ทุกวันเสาร์ 14:00 UTC (21:00 Bangkok)
+                             # หลังจาก etfdb.com อัปเดต flow data สัปดาห์นั้น
+  workflow_dispatch:         # รันด้วยมือได้ทุกเมื่อ (เช่น หลัง upload CSV ใหม่)
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install yfinance pandas numpy
+
+      - name: Run fetch.py (regime + flow)
+        run: python fetch.py
+
+      - name: Commit & push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/latest.json data/flows/
+          git diff --staged --quiet || git commit -m "data: weekly regime update $(date -u '+%Y-%m-%d')"
+          git push
+
+# ─────────────────────────────────────────────────────
+# rs_signal.py — run manually every month-end
+#
+# ทุกสิ้นเดือน (ทำเอง ไม่ใช่ automation):
+#   1. python rs_signal.py
+#   2. git add data/rs_latest.json data/rs_YYYYMMDD.json
+#   3. git commit -m "signal: YYYY-MM rotation"
+#   4. git push
+#
+# เหตุผล: rs_signal.py ต้องการ review ก่อน execute trade
+#         ไม่ควร auto-push โดยไม่มีคนดู
+# ─────────────────────────────────────────────────────
