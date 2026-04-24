@@ -1,0 +1,35 @@
+name: RS Rotation Signal (Monthly)
+
+on:
+  schedule:
+    - cron: "0 15 28-31 * *"   # 15:00 UTC ของวันที่ 28-31 ทุกเดือน
+                                 # รันทุกวันช่วงสิ้นเดือน แต่ไม่เป็นปัญหา
+                                 # เพราะ rs_signal.py idempotent — รันซ้ำได้
+  workflow_dispatch:             # กดมือได้ด้วยถ้าต้องการรันทันที
+
+jobs:
+  signal:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install yfinance pandas numpy scipy
+
+      - name: Run rs_signal.py (RS rotation signal)
+        run: python rs_signal.py
+
+      - name: Commit & push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/rs_latest.json data/rs_*.json data/rs_previous.json
+          git diff --staged --quiet || git commit -m "signal: RS rotation $(date -u '+%Y-%m-%d')"
+          git push
