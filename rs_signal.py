@@ -203,7 +203,7 @@ def compute_clarity_score(rs_score, vol_trend, holdings, prev_holdings_list,
     3. Volume confirmation (25%)
     """
     if not holdings:
-        return 0.0, 0.0, 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0, 1.0, 0
 
     latest_date = rs_score.index[-1]
 
