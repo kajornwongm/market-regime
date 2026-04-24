@@ -20,10 +20,8 @@ ASSET_CLASS_KEYWORDS = {
     "equity":       "Equity",
     "bond":         "Bond",
     "commodity":    "Commodity",
-    "commodities":  "Commodity",
     "real-estate":  "Real Estate",
     "real_estate":  "Real Estate",
-    "realestate":   "Real Estate",
     "currency":     "Currency",
     "alternatives": "Alternatives",
     "multi-asset":  "Multi Asset",
@@ -65,13 +63,20 @@ SECTOR_ETF_MAP = {
 }
 
 PRICE_TICKERS = [
-    "SPY","QQQ","IWM","VTV","TLT","AGG","SHY",
-    "GLD","DBC","XLE","^VIX",
+    # Market / risk
+    "SPY","QQQ","IWM","VTV","VT","TLT","AGG","SHY","^VIX",
+    # Commodities
+    "GLD","DBC","XLE",
+    # ── RS rotation universe (must match rs_signal.py L1) ──
+    # Equity — original
     "EWY","EWJ","INDA","EWZ","VNM","EWT","EWG","EWU",
-    "XLK","XLV","XLI","XLU","XAR","XLF","XLB","VNQ","IBIT",
-    "FXI","MCHI","EWA","EWC","EZA","EWW","TUR","THD","IDX",
-    "SMH","SOXX","IBB","XBI","IGV","ARKK","BOTZ","HACK","SKYY","FINX","PAVE",
-    "BIL","SHV","GDX","SLV","USO","ENOR","EWD","EWL","EWP","EWI","EWQ","EWN",
+    "MCHI","EWA","EWQ","KSA","EWW",
+    # Bonds
+    "IEF",
+    # ── Sector ETFs (rs_signal.py L2) ──
+    "XLK","XLF","XLE","XLV","XLI","XLY","XLP","XLU","XLRE","XLB","XLC",
+    # Other
+    "XAR","VNQ","IBIT",
 ]
 
 def get_prices(lookback_days=200):
@@ -305,19 +310,51 @@ def get_strategy(r):
             }.get(r,["Review positions","Monitor signals"])
 
 def compute_countries_price(price, ticker_flows):
-    ctry={"EWY":"🇰🇷 Korea","EWJ":"🇯🇵 Japan","INDA":"🇮🇳 India","EWZ":"🇧🇷 Brazil",
-          "VNM":"🇻🇳 Vietnam","EWT":"🇹🇼 Taiwan","EWG":"🇩🇪 Germany","EWU":"🇬🇧 UK","SPY":"🇺🇸 US"}
-    spy_m=mom(price,"SPY")
-    result=[]
-    for t,name in ctry.items():
-        fl=ticker_flows.get(t,{})
-        result.append({"ticker":t,"name":name,
-                        "ret_1m":round(mom(price,t),1),"ret_3m":round(mom(price,t,63),1),
-                        "rs_vs_spy":round(mom(price,t)-spy_m,1),
-                        "ma_signal":ma_sig(price,t),
-                        "flow_4w_mn":fl.get("flow_4w_mn"),"flow_1w_mn":fl.get("flow_1w_mn"),
-                        "flow_accel":fl.get("accelerating"),"flow_dir":fl.get("direction")})
-    return sorted(result,key=lambda x:x["rs_vs_spy"],reverse=True)
+    # Full L1 universe — must match rs_signal.py ORIGINAL_UNIVERSE
+    # RS computed vs VT (not SPY) to align with rotation signal
+    ctry = {
+        "SPY":  "🇺🇸 US",
+        "EWY":  "🇰🇷 Korea",
+        "INDA": "🇮🇳 India",
+        "EWZ":  "🇧🇷 Brazil",
+        "VNM":  "🇻🇳 Vietnam",
+        "EWT":  "🇹🇼 Taiwan",
+        "EWG":  "🇩🇪 Germany",
+        "MCHI": "🇨🇳 China",
+        "EWQ":  "🇫🇷 France",
+        "KSA":  "🇸🇦 Saudi Arabia",
+        "EWW":  "🇲🇽 Mexico",
+        "EWU":  "🇬🇧 UK",
+        "EWJ":  "🇯🇵 Japan",
+        "EWA":  "🇦🇺 Australia",
+        # Defensive
+        "TLT":  "🟡 US 20yr Bond",
+        "IEF":  "🟡 US 7-10yr Bond",
+        "GLD":  "🥇 Gold",
+    }
+    # Use VT as benchmark to match rs_signal.py logic
+    vt_m = mom(price, "VT")
+    spy_m = mom(price, "SPY")
+    result = []
+    for t, name in ctry.items():
+        if t not in price.columns:
+            continue
+        fl = ticker_flows.get(t, {})
+        result.append({
+            "ticker":      t,
+            "name":        name,
+            "ret_1m":      round(mom(price, t), 1),
+            "ret_3m":      round(mom(price, t, 63), 1),
+            "rs_vs_vt":    round(mom(price, t) - vt_m, 1),   # vs VT (rotation benchmark)
+            "rs_vs_spy":   round(mom(price, t) - spy_m, 1),  # vs SPY (reference)
+            "ma_signal":   ma_sig(price, t),
+            "flow_4w_mn":  fl.get("flow_4w_mn"),
+            "flow_1w_mn":  fl.get("flow_1w_mn"),
+            "flow_accel":  fl.get("accelerating"),
+            "flow_dir":    fl.get("direction"),
+        })
+    # Sort by RS vs VT — same ranking order as rs_signal.py
+    return sorted(result, key=lambda x: x["rs_vs_vt"], reverse=True)
 
 def generate_alerts(scores, composite, adjusted, vix, vix_label,
                     sect_ranking, asset_flows, ticker_flows, prev_scores):
@@ -378,82 +415,21 @@ def main():
     adjusted=round(composite*v_mult,1)
     regime_label=classify_regime(scores,adjusted)
 
-    # Delta scores
-    delta = {k: round(scores[k] - prev_scores.get(k, scores[k]), 1) for k in scores} if prev_scores else {k: 0.0 for k in scores}
-
-    # Confidence score
-    _signals = []
-    _rb = scores["risk"]>60; _rbe = scores["risk"]<40
-    _vc = vix<22; _vf = vix>28
-    _le = scores["liquidity"]>55; _lt = scores["liquidity"]<45
-    if _rb:   _signals.extend([1, 1 if _vc else -1, 1 if _le else 0])
-    elif _rbe: _signals.extend([-1, -1 if _vf else 1, -1 if _lt else 0])
-    else:      _signals.extend([0,0,0])
-    _signals.append(1 if scores["growth"]>60 and _rb else (-1 if scores["growth"]<40 and _rbe else 0))
-    _align = abs(sum(_signals))/len(_signals) if _signals else 0
-    _base  = 40 + _align*50
-    if asset_flows or ticker_flows: _base = min(_base+10, 95)
-    confidence = round(_base, 0)
-
-    # Action panel
-    ow, uw, watch, ideas = [], [], [], []
-    if scores["inflation"]>65: ow+=["XLE","GLD","DBC"]; uw+=["QQQ","TLT"]
-    if scores["growth"]>65 and scores["risk"]>60: ow+=["QQQ","XLK"]; uw+=["XLU","TLT"]
-    if scores["risk"]<40: ow+=["TLT","SHY","GLD"]; uw+=["SPY","QQQ"]
-    if scores["liquidity"]>65: ow+=["VNQ","XLF"]
-    if scores["liquidity"]<35: uw+=["VNQ","XLF"]; watch+=["Cash buffer ≥ 30%"]
-    for c in (country_flows or [])[:3]:
-        if c["flow_4w_mn"]>100: ideas.append(f"Watch {c['ticker']} — inflow ${c['flow_4w_mn']:.0f}M")
-    if sect_ranking and sect_ranking[0]["rs"]>2:
-        ideas.append(f"Sector leader: {sect_ranking[0]['name']} RS +{sect_ranking[0]['rs']:.1f}%")
-    if vix>28: ideas.append("VIX elevated — size down")
-    elif vix<16 and adjusted>70: ideas.append("Low vol + high score — full size justified")
-    rising  = [k for k,v in delta.items() if v>=10]
-    falling = [k for k,v in delta.items() if v<=-10]
-    narrative = []
-    if rising:  narrative.append(f"{', '.join(r.title() for r in rising)} rising — momentum building")
-    if falling: narrative.append(f"{', '.join(f.title() for f in falling)} falling — watch regime shift")
-    if not rising and not falling: narrative.append("Scores stable — no major regime change")
-    action = {
-        "overweight":  list(dict.fromkeys(ow))[:5],
-        "underweight": list(dict.fromkeys(uw))[:5],
-        "watch":       watch[:3],
-        "ideas":       ideas[:5],
-        "narrative":   narrative[:2],
-        "confidence":  confidence,
-        "bias":        "bullish" if adjusted>60 else ("bearish" if adjusted<40 else "neutral"),
-    }
-
-    # EOD prices for portfolio auto-fill
-    eod_prices = {}
-    for t in price.columns:
-        if t.startswith("^"): continue
-        s = price[t].dropna()
-        if len(s): eod_prices[t] = round(float(s.iloc[-1]), 4)
-    price_date = price.index[-1].strftime("%Y-%m-%d") if len(price.index) else ""
-    etf_list = sorted(set(list(eod_prices.keys()) + list(ticker_flows.keys())))
-
     output={
         "generated_at":    datetime.utcnow().isoformat()+"Z",
         "flow_date":        flow_date,
-        "price_date":       price_date,
         "flow_updated":     bool(asset_flows or ticker_flows),
         "n_flow_tickers":   len(ticker_flows),
         "n_asset_classes":  len(asset_flows),
         "vix":              round(vix,1),
         "vol_modifier":     round(v_mult,2),
         "vol_label":        v_label,
-        "eod_prices":       eod_prices,
-        "etf_list":         etf_list,
         "regime":{
             "label":     regime_label,
             "composite": round(composite,1),
             "adjusted":  adjusted,
             "scores":    {k:round(v,1) for k,v in scores.items()},
-            "delta":     delta,
         },
-        "confidence":       confidence,
-        "action":           action,
         "strategy":         get_strategy(regime_label),
         "alerts":           generate_alerts(scores,composite,adjusted,vix,v_label,
                                              sect_ranking,asset_flows,ticker_flows,prev_scores),
@@ -479,83 +455,3 @@ def main():
 
 if __name__=="__main__":
     main()
-
-# ── Delta, Confidence, Action Panel ─────────────────────────────────────────
-def compute_delta(scores, prev_scores):
-    if not prev_scores:
-        return {k: 0.0 for k in scores}
-    return {k: round(scores[k] - prev_scores.get(k, scores[k]), 1) for k in scores}
-
-def compute_confidence(scores, vix, flow_updated):
-    signals = []
-    risk_bull = scores["risk"] > 60
-    risk_bear = scores["risk"] < 40
-    vol_calm  = vix < 22
-    vol_fear  = vix > 28
-    liq_easy  = scores["liquidity"] > 55
-    liq_tight = scores["liquidity"] < 45
-    if risk_bull:
-        signals.extend([1, 1 if vol_calm else -1, 1 if liq_easy else 0])
-    elif risk_bear:
-        signals.extend([-1, -1 if vol_fear else 1, -1 if liq_tight else 0])
-    else:
-        signals.extend([0, 0, 0])
-    if scores["growth"] > 60 and risk_bull:
-        signals.append(1)
-    elif scores["growth"] < 40 and risk_bear:
-        signals.append(-1)
-    else:
-        signals.append(0)
-    if not signals:
-        return 50.0
-    alignment = abs(sum(signals)) / len(signals)
-    base = 40 + alignment * 50
-    if flow_updated:
-        base = min(base + 10, 95)
-    return round(base, 0)
-
-def build_action_panel(scores, regime_label, adjusted, confidence,
-                       delta, sect_ranking, country_flows, ticker_flows, vix):
-    overweight, underweight, watch, ideas = [], [], [], []
-    if scores["inflation"] > 65:
-        overweight += ["XLE","GLD","DBC"]
-        underweight += ["QQQ","TLT"]
-    if scores["growth"] > 65 and scores["risk"] > 60:
-        overweight += ["QQQ","XLK"]
-        underweight += ["XLU","TLT"]
-    if scores["risk"] < 40:
-        overweight += ["TLT","SHY","GLD"]
-        underweight += ["SPY","QQQ"]
-    if scores["liquidity"] > 65:
-        overweight += ["VNQ","XLF"]
-    if scores["liquidity"] < 35:
-        underweight += ["VNQ","XLF"]
-        watch += ["Cash buffer ≥ 30%"]
-    for c in (country_flows or [])[:3]:
-        if c["flow_4w_mn"] > 100:
-            ideas.append(f"Watch {c['ticker']} ({c['name'].split(' ',1)[-1]}) — inflow ${c['flow_4w_mn']:.0f}M")
-    if sect_ranking and sect_ranking[0]["rs"] > 2:
-        top_s = sect_ranking[0]
-        ideas.append(f"Sector leader: {top_s['name']} RS +{top_s['rs']:.1f}%")
-    if vix > 28:
-        ideas.append("VIX elevated — size down, wait for vol compression")
-    elif vix < 16 and adjusted > 70:
-        ideas.append("Low vol + high score — clean trend, full size justified")
-    rising  = [k for k,v in delta.items() if v >= 10]
-    falling = [k for k,v in delta.items() if v <= -10]
-    narrative = []
-    if rising:
-        narrative.append(f"{', '.join(r.title() for r in rising)} rising — momentum building")
-    if falling:
-        narrative.append(f"{', '.join(f.title() for f in falling)} falling — watch regime shift")
-    if not rising and not falling:
-        narrative.append("Scores stable — no major regime change detected")
-    return {
-        "overweight":  list(dict.fromkeys(overweight))[:5],
-        "underweight": list(dict.fromkeys(underweight))[:5],
-        "watch":       watch[:3],
-        "ideas":       ideas[:5],
-        "narrative":   narrative[:2],
-        "confidence":  confidence,
-        "bias":        "bullish" if adjusted > 60 else ("bearish" if adjusted < 40 else "neutral"),
-    }
