@@ -1,0 +1,649 @@
+{
+  "generated_at": "2026-04-24T10:05:45.513609Z",
+  "date": "2026-04-24",
+  "signal": {
+    "mode": "ACTIVE",
+    "l1_top": [
+      "EWY",
+      "EWT"
+    ],
+    "final_holdings": [
+      {
+        "ticker": "EWY",
+        "weight": 0.5,
+        "layer": "L1"
+      },
+      {
+        "ticker": "EWT",
+        "weight": 0.5,
+        "layer": "L1"
+      }
+    ],
+    "sells": [],
+    "buys": [
+      "EWY",
+      "EWT"
+    ],
+    "holds": [],
+    "l2_active": false,
+    "l2_sectors": [],
+    "l1_ranking": [
+      {
+        "ticker": "EWY",
+        "name": "\ud83c\uddf0\ud83c\uddf7 Korea",
+        "rs": 1.5095,
+        "asset_class": "equity",
+        "outperforms": true
+      },
+      {
+        "ticker": "EWT",
+        "name": "\ud83c\uddf9\ud83c\uddfc Taiwan",
+        "rs": 1.167,
+        "asset_class": "equity",
+        "outperforms": true
+      },
+      {
+        "ticker": "VNM",
+        "name": "\ud83c\uddfb\ud83c\uddf3 Vietnam",
+        "rs": 1.0871,
+        "asset_class": "equity",
+        "outperforms": true
+      },
+      {
+        "ticker": "EWZ",
+        "name": "\ud83c\udde7\ud83c\uddf7 Brazil",
+        "rs": 1.0616,
+        "asset_class": "equity",
+        "outperforms": true
+      },
+      {
+        "ticker": "EWW",
+        "name": "\ud83c\uddf2\ud83c\uddfd Mexico",
+        "rs": 1.0441,
+        "asset_class": "equity",
+        "outperforms": true
+      },
+      {
+        "ticker": "GLD",
+        "name": "\ud83e\udd47 Gold",
+        "rs": 0.9488,
+        "asset_class": "gold",
+        "outperforms": false
+      },
+      {
+        "ticker": "EWU",
+        "name": "\ud83c\uddec\ud83c\udde7 UK",
+        "rs": 0.9451,
+        "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "EWQ",
+        "name": "\ud83c\uddeb\ud83c\uddf7 France",
+        "rs": 0.9422,
+        "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "EWJ",
+        "name": "\ud83c\uddef\ud83c\uddf5 Japan",
+        "rs": 0.9399,
+        "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "SPY",
+        "name": "\ud83c\uddfa\ud83c\uddf8 US",
+        "rs": 0.9332,
+        "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "EWG",
+        "name": "\ud83c\udde9\ud83c\uddea Germany",
+        "rs": 0.9025,
+        "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "MCHI",
+        "name": "\ud83c\udde8\ud83c\uddf3 China",
+        "rs": 0.8692,
+        "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "IEF",
+        "name": "\ud83d\udfe1 US 7-10yr Bond",
+        "rs": 0.8393,
+        "asset_class": "bond",
+        "outperforms": false
+      },
+      {
+        "ticker": "EWA",
+        "name": "\ud83c\udde6\ud83c\uddfa Australia",
+        "rs": 0.8329,
+        "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "INDA",
+        "name": "\ud83c\uddee\ud83c\uddf3 India",
+        "rs": 0.7788,
+        "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "TLT",
+        "name": "\ud83d\udfe1 US 20yr Bond",
+        "rs": 0.7699,
+        "asset_class": "bond",
+        "outperforms": false
+      },
+      {
+        "ticker": "KSA",
+        "name": "\ud83c\uddf8\ud83c\udde6 Saudi Arabia",
+        "rs": 0.7529,
+        "asset_class": "equity",
+        "outperforms": false
+      }
+    ],
+    "l2_ranking": [
+      {
+        "ticker": "XLE",
+        "name": "Energy",
+        "rs": 1.1832,
+        "outperforms": true
+      },
+      {
+        "ticker": "XLI",
+        "name": "Industrials",
+        "rs": 0.9729,
+        "outperforms": false
+      },
+      {
+        "ticker": "GLD",
+        "name": "\ud83e\udd47 Gold",
+        "rs": 0.9632,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLU",
+        "name": "Utilities",
+        "rs": 0.9368,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLK",
+        "name": "Technology",
+        "rs": 0.9344,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLB",
+        "name": "Materials",
+        "rs": 0.9192,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLC",
+        "name": "Communication",
+        "rs": 0.903,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLY",
+        "name": "Cons. Discretionary",
+        "rs": 0.8993,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials",
+        "rs": 0.8397,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLV",
+        "name": "Health Care",
+        "rs": 0.8343,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLRE",
+        "name": "Real Estate",
+        "rs": 0.8233,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLP",
+        "name": "Cons. Staples",
+        "rs": 0.819,
+        "outperforms": false
+      },
+      {
+        "ticker": "TLT",
+        "name": "\ud83d\udfe1 US 20yr Bond",
+        "rs": 0.7801,
+        "outperforms": false
+      }
+    ],
+    "l1_heatmap": {
+      "months": [
+        "Nov 25",
+        "Dec 25",
+        "Jan 26",
+        "Feb 26",
+        "Mar 26",
+        "Apr 26"
+      ],
+      "rows": [
+        {
+          "ticker": "SPY",
+          "name": "\ud83c\uddfa\ud83c\uddf8 US",
+          "values": [
+            1.02,
+            0.97,
+            0.98,
+            1.0,
+            1.03,
+            0.93
+          ]
+        },
+        {
+          "ticker": "EWJ",
+          "name": "\ud83c\uddef\ud83c\uddf5 Japan",
+          "values": [
+            1.04,
+            0.95,
+            1.13,
+            1.18,
+            1.11,
+            0.94
+          ]
+        },
+        {
+          "ticker": "EWY",
+          "name": "\ud83c\uddf0\ud83c\uddf7 Korea",
+          "values": [
+            1.45,
+            1.27,
+            1.43,
+            1.79,
+            2.01,
+            1.51
+          ]
+        },
+        {
+          "ticker": "INDA",
+          "name": "\ud83c\uddee\ud83c\uddf3 India",
+          "values": [
+            0.93,
+            0.92,
+            0.98,
+            1.04,
+            0.96,
+            0.78
+          ]
+        },
+        {
+          "ticker": "EWG",
+          "name": "\ud83c\udde9\ud83c\uddea Germany",
+          "values": [
+            1.03,
+            1.02,
+            1.11,
+            0.9,
+            1.09,
+            0.9
+          ]
+        },
+        {
+          "ticker": "EWZ",
+          "name": "\ud83c\udde7\ud83c\uddf7 Brazil",
+          "values": [
+            1.07,
+            1.26,
+            1.13,
+            1.26,
+            1.13,
+            1.06
+          ]
+        },
+        {
+          "ticker": "EWT",
+          "name": "\ud83c\uddf9\ud83c\uddfc Taiwan",
+          "values": [
+            1.13,
+            0.97,
+            1.17,
+            1.16,
+            1.26,
+            1.17
+          ]
+        },
+        {
+          "ticker": "VNM",
+          "name": "\ud83c\uddfb\ud83c\uddf3 Vietnam",
+          "values": [
+            1.14,
+            1.16,
+            1.3,
+            1.2,
+            1.18,
+            1.09
+          ]
+        },
+        {
+          "ticker": "MCHI",
+          "name": "\ud83c\udde8\ud83c\uddf3 China",
+          "values": [
+            1.04,
+            1.03,
+            1.11,
+            1.05,
+            1.0,
+            0.87
+          ]
+        },
+        {
+          "ticker": "EWA",
+          "name": "\ud83c\udde6\ud83c\uddfa Australia",
+          "values": [
+            0.97,
+            0.94,
+            1.01,
+            1.06,
+            1.04,
+            0.83
+          ]
+        },
+        {
+          "ticker": "EWU",
+          "name": "\ud83c\uddec\ud83c\udde7 UK",
+          "values": [
+            1.02,
+            0.99,
+            1.01,
+            1.1,
+            1.09,
+            0.95
+          ]
+        },
+        {
+          "ticker": "EWQ",
+          "name": "\ud83c\uddeb\ud83c\uddf7 France",
+          "values": [
+            1.12,
+            1.03,
+            1.05,
+            0.97,
+            1.11,
+            0.94
+          ]
+        },
+        {
+          "ticker": "KSA",
+          "name": "\ud83c\uddf8\ud83c\udde6 Saudi Arabia",
+          "values": [
+            0.83,
+            0.75,
+            0.94,
+            0.96,
+            0.85,
+            0.75
+          ]
+        },
+        {
+          "ticker": "EWW",
+          "name": "\ud83c\uddf2\ud83c\uddfd Mexico",
+          "values": [
+            1.11,
+            1.09,
+            1.19,
+            1.28,
+            1.23,
+            1.04
+          ]
+        },
+        {
+          "ticker": "TLT",
+          "name": "\ud83d\udfe1 US 20yr Bond",
+          "values": [
+            0.88,
+            0.92,
+            0.98,
+            0.88,
+            0.92,
+            0.77
+          ]
+        },
+        {
+          "ticker": "IEF",
+          "name": "\ud83d\udfe1 US 7-10yr Bond",
+          "values": [
+            1.0,
+            0.88,
+            0.95,
+            0.92,
+            1.0,
+            0.84
+          ]
+        },
+        {
+          "ticker": "GLD",
+          "name": "\ud83e\udd47 Gold",
+          "values": [
+            1.06,
+            1.1,
+            1.42,
+            1.3,
+            1.12,
+            0.95
+          ]
+        }
+      ]
+    },
+    "l2_heatmap": {
+      "months": [
+        "Nov 25",
+        "Dec 25",
+        "Jan 26",
+        "Feb 26",
+        "Mar 26",
+        "Apr 26"
+      ],
+      "rows": [
+        {
+          "ticker": "XLK",
+          "name": "Technology",
+          "values": [
+            1.13,
+            0.88,
+            1.07,
+            1.2,
+            1.05,
+            0.93
+          ]
+        },
+        {
+          "ticker": "XLF",
+          "name": "Financials",
+          "values": [
+            0.99,
+            0.92,
+            0.99,
+            1.03,
+            0.94,
+            0.84
+          ]
+        },
+        {
+          "ticker": "XLE",
+          "name": "Energy",
+          "values": [
+            0.91,
+            0.92,
+            1.11,
+            1.09,
+            1.03,
+            1.18
+          ]
+        },
+        {
+          "ticker": "XLV",
+          "name": "Health Care",
+          "values": [
+            1.01,
+            0.91,
+            0.96,
+            0.99,
+            0.98,
+            0.83
+          ]
+        },
+        {
+          "ticker": "XLI",
+          "name": "Industrials",
+          "values": [
+            1.03,
+            0.91,
+            1.01,
+            1.11,
+            1.14,
+            0.97
+          ]
+        },
+        {
+          "ticker": "XLY",
+          "name": "Cons. Discretionary",
+          "values": [
+            0.99,
+            0.84,
+            0.93,
+            1.04,
+            1.0,
+            0.9
+          ]
+        },
+        {
+          "ticker": "XLP",
+          "name": "Cons. Staples",
+          "values": [
+            0.93,
+            0.87,
+            1.02,
+            1.02,
+            0.91,
+            0.82
+          ]
+        },
+        {
+          "ticker": "XLU",
+          "name": "Utilities",
+          "values": [
+            0.96,
+            0.97,
+            1.06,
+            1.08,
+            1.0,
+            0.94
+          ]
+        },
+        {
+          "ticker": "XLRE",
+          "name": "Real Estate",
+          "values": [
+            0.91,
+            0.92,
+            0.98,
+            0.95,
+            0.92,
+            0.82
+          ]
+        },
+        {
+          "ticker": "XLB",
+          "name": "Materials",
+          "values": [
+            0.95,
+            0.84,
+            1.0,
+            1.11,
+            1.02,
+            0.92
+          ]
+        },
+        {
+          "ticker": "XLC",
+          "name": "Communication",
+          "values": [
+            1.03,
+            0.99,
+            1.06,
+            1.1,
+            1.06,
+            0.9
+          ]
+        },
+        {
+          "ticker": "TLT",
+          "name": "\ud83d\udfe1 US 20yr Bond",
+          "values": [
+            0.9,
+            0.94,
+            1.0,
+            0.9,
+            0.95,
+            0.78
+          ]
+        },
+        {
+          "ticker": "GLD",
+          "name": "\ud83e\udd47 Gold",
+          "values": [
+            1.08,
+            1.13,
+            1.45,
+            1.34,
+            1.16,
+            0.96
+          ]
+        }
+      ]
+    },
+    "clarity_score": 0.0,
+    "clarity_components": {
+      "margin": 0.0,
+      "consistency": 0.0,
+      "volume": 0.0,
+      "avg_rs": 1.0,
+      "streak": 0,
+      "threshold": 5.5
+    }
+  },
+  "est_cost_usd": 32.1,
+  "dd_context": {
+    "current": -1.12,
+    "max": -34.24,
+    "duration_m": 0,
+    "similar_10y": 42,
+    "severity_pct": 3.3
+  },
+  "portfolio_size": 30000,
+  "holdings_history": [
+    [
+      "EWY",
+      "EWT"
+    ]
+  ],
+  "prev_holdings": [],
+  "config": {
+    "l1_top_n": 2,
+    "l2_top_n": 3,
+    "benchmark_l1": "VT",
+    "benchmark_l2": "SPY",
+    "score_threshold": 5.5,
+    "lookback_months": 11
+  }
+}
