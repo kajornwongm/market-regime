@@ -234,7 +234,7 @@ def compute_clarity_score(rs_score, vol_trend, holdings, prev_holdings_list,
     c_volume = vol_confirm * 10
 
     composite = w_margin * c_margin + w_consistency * c_consistency + w_volume * c_volume
-    return round(composite, 2), round(c_margin, 2), round(c_consistency, 2), round(c_volume, 2)
+    return round(composite, 2), round(c_margin, 2), round(c_consistency, 2), round(c_volume, 2), round(avg_rs, 4), int(streak)
 
 
 # ══════════════════════════════════════════════════════
@@ -255,7 +255,7 @@ def get_current_signal(l1_rs, l2_rs, prev_holdings_list, vol_trend):
 
     # Check clarity score using previous month signal (avoid look-ahead)
     prev_hold = prev_holdings_list[-1] if prev_holdings_list else []
-    score, c_margin, c_cons, c_vol = compute_clarity_score(
+    score, c_margin, c_cons, c_vol, avg_rs, streak = compute_clarity_score(
         l1_rs, vol_trend, prev_hold, prev_holdings_list[:-1]
     )
 
