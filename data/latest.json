@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-24T06:21:41.378634Z",
+  "generated_at": "2026-04-24T07:48:47.590659Z",
   "flow_date": "2026-04-20",
   "price_date": "2026-04-23",
   "flow_updated": true,
@@ -4842,11 +4842,11 @@
       "sector": 52.2
     },
     "delta": {
-      "growth": 0.3,
-      "risk": -0.6,
-      "inflation": -1.3,
-      "liquidity": 2.0,
-      "sector": -2.6
+      "growth": 0.0,
+      "risk": 0.0,
+      "inflation": 0.0,
+      "liquidity": 0.0,
+      "sector": 0.0
     }
   },
   "confidence": 88.0,
