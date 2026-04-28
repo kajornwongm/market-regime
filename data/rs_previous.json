@@ -1,1 +1,1 @@
-{"date": "2026-04-24", "final_holdings": [{"ticker": "EWY", "weight": 0.5, "layer": "L1"}, {"ticker": "EWT", "weight": 0.5, "layer": "L1"}], "holdings_history": [["EWY", "EWT"]]}
+{"date": "2026-04-28", "final_holdings": [{"ticker": "EWT", "weight": 0.5, "layer": "L1"}, {"ticker": "VNM", "weight": 0.5, "layer": "L1"}], "holdings_history": [["EWY", "EWT"], ["EWT", "VNM"]]}
