@@ -253,25 +253,39 @@ def get_current_signal(l1_rs, l2_rs, prev_holdings_list, vol_trend):
     l1_scores = l1_rs.loc[latest, l1_tickers].dropna().sort_values(ascending=False)
     l1_outperform = l1_scores[l1_scores > 1.0]
 
-    # Check clarity score using previous month signal (avoid look-ahead)
-    prev_hold = prev_holdings_list[-1] if prev_holdings_list else []
+    # Compute clarity score from prospective top holdings (current RS leaders)
+    # NOT from prev_hold — avoids 0.0 score on first run when history is empty
+    prospective_hold = list(l1_outperform.head(L1_TOP_N).index) if len(l1_outperform) > 0 else []
+    prev_hold        = prev_holdings_list[-1] if prev_holdings_list else []
     score, c_margin, c_cons, c_vol, avg_rs, streak = compute_clarity_score(
-        l1_rs, vol_trend, prev_hold, prev_holdings_list[:-1]
+        l1_rs, vol_trend,
+        prospective_hold if prospective_hold else prev_hold,
+        prev_holdings_list[:-1]
     )
 
-    # Apply binary filter (threshold 5.5 — hidden from dashboard)
-    if score < SCORE_THRESH and len(prev_holdings_list) > 0:
+    # Apply binary filter ONLY after 3+ months of history (warmup bypass)
+    WARMUP_MONTHS = 3
+    has_history   = len(prev_holdings_list) >= WARMUP_MONTHS
+    if has_history and score < SCORE_THRESH:
         return {
             "mode": "CASH",
-            "reason": f"Signal clarity {score} < threshold {SCORE_THRESH}",
+            "reason": f"Signal clarity {score:.2f} < threshold {SCORE_THRESH}",
             "l1_top": [],
             "final_holdings": [],
             "sells": [],
             "buys": [],
             "l2_active": False,
-            "clarity_score": score,
-            "clarity_components": {"margin": c_margin, "consistency": c_cons, "volume": c_vol},
+            "clarity_score": round(score, 2),
+            "clarity_components": {
+                "margin":      round(c_margin, 2),
+                "consistency": round(c_cons, 2),
+                "volume":      round(c_vol, 2),
+                "avg_rs":      round(avg_rs, 4),
+                "streak":      streak,
+                "threshold":   SCORE_THRESH,
+            },
         }
+
 
     if len(l1_outperform) == 0:
         return {
