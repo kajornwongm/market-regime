@@ -1,19 +1,22 @@
 {
-  "generated_at": "2026-05-04T03:24:28.263070Z",
+  "generated_at": "2026-05-04T08:04:26.585988Z",
   "date": "2026-05-04",
   "signal": {
     "mode": "CASH",
-    "reason": "Signal clarity 0.0 < threshold 5.5",
+    "reason": "Signal clarity 5.05 < threshold 5.5",
     "l1_top": [],
     "final_holdings": [],
     "sells": [],
     "buys": [],
     "l2_active": false,
-    "clarity_score": 0.0,
+    "clarity_score": 5.05,
     "clarity_components": {
-      "margin": 0.0,
-      "consistency": 0.0,
-      "volume": 0.0
+      "margin": 10.0,
+      "consistency": 3.0,
+      "volume": 0.0,
+      "avg_rs": 1.4426,
+      "streak": 0,
+      "threshold": 5.5
     }
   },
   "est_cost_usd": 0.0,
@@ -34,6 +37,7 @@
       "EWT",
       "VNM"
     ],
+    [],
     [],
     [],
     []
