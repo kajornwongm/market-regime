@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-05-23T17:43:23.419823Z",
+  "generated_at": "2026-05-30T15:16:33.387184Z",
   "flow_date": "2026-04-20",
   "flow_updated": true,
   "n_flow_tickers": 4759,
   "n_asset_classes": 4,
-  "vix": 16.7,
+  "vix": 15.3,
   "vol_modifier": 1.0,
   "vol_label": "low (\u00d71.0)",
   "regime": {
     "label": "Transition / Neutral",
-    "composite": 57.8,
-    "adjusted": 57.8,
+    "composite": 55.9,
+    "adjusted": 55.9,
     "scores": {
-      "growth": 61.3,
-      "risk": 64.1,
-      "inflation": 55.5,
-      "liquidity": 48.4,
-      "sector": 58.1
+      "growth": 62.9,
+      "risk": 59.5,
+      "inflation": 41.2,
+      "liquidity": 50.3,
+      "sector": 67.5
     }
   },
   "strategy": [
@@ -25,6 +25,11 @@
     "Watch alerts"
   ],
   "alerts": [
+    {
+      "type": "regime_shift",
+      "level": "alert",
+      "msg": "Regime shift: Sector \u2191 15pt"
+    },
     {
       "type": "asset_flow",
       "level": "info",
@@ -809,60 +814,60 @@
     {
       "ticker": "XLK",
       "name": "Technology",
-      "momentum": 15.8,
-      "rs": 10.5
-    },
-    {
-      "ticker": "XLE",
-      "name": "Energy",
-      "momentum": 4.4,
-      "rs": -0.8
+      "momentum": 19.8,
+      "rs": 14.5
     },
     {
       "ticker": "XAR",
       "name": "Defense",
-      "momentum": 3.7,
-      "rs": -1.6
+      "momentum": 11.1,
+      "rs": 5.9
     },
     {
       "ticker": "XLV",
       "name": "Healthcare",
-      "momentum": 2.5,
-      "rs": -2.8
-    },
-    {
-      "ticker": "XLF",
-      "name": "Financials",
-      "momentum": 0.3,
-      "rs": -5.0
-    },
-    {
-      "ticker": "XLI",
-      "name": "Industrials",
-      "momentum": -1.3,
-      "rs": -6.6
-    },
-    {
-      "ticker": "XLU",
-      "name": "Utilities",
-      "momentum": -1.6,
-      "rs": -6.9
+      "momentum": 2.4,
+      "rs": -2.9
     },
     {
       "ticker": "XLB",
       "name": "Materials",
-      "momentum": -2.9,
-      "rs": -8.2
+      "momentum": -0.6,
+      "rs": -5.9
+    },
+    {
+      "ticker": "XLI",
+      "name": "Industrials",
+      "momentum": -0.8,
+      "rs": -6.1
+    },
+    {
+      "ticker": "XLF",
+      "name": "Financials",
+      "momentum": -1.1,
+      "rs": -6.3
+    },
+    {
+      "ticker": "XLU",
+      "name": "Utilities",
+      "momentum": -5.2,
+      "rs": -10.4
+    },
+    {
+      "ticker": "XLE",
+      "name": "Energy",
+      "momentum": -5.6,
+      "rs": -10.9
     }
   ],
   "countries": [
     {
       "ticker": "EWY",
       "name": "\ud83c\uddf0\ud83c\uddf7 Korea",
-      "ret_1m": 20.9,
-      "ret_3m": 30.7,
-      "rs_vs_vt": 16.6,
-      "rs_vs_spy": 15.6,
+      "ret_1m": 28.0,
+      "ret_3m": 39.5,
+      "rs_vs_vt": 23.5,
+      "rs_vs_spy": 22.8,
       "ma_signal": "insufficient",
       "flow_4w_mn": -275.0,
       "flow_1w_mn": -27.9,
@@ -872,10 +877,10 @@
     {
       "ticker": "EWT",
       "name": "\ud83c\uddf9\ud83c\uddfc Taiwan",
-      "ret_1m": 15.0,
-      "ret_3m": 32.3,
-      "rs_vs_vt": 10.7,
-      "rs_vs_spy": 9.7,
+      "ret_1m": 14.4,
+      "ret_3m": 36.9,
+      "rs_vs_vt": 9.8,
+      "rs_vs_spy": 9.1,
       "ma_signal": "insufficient",
       "flow_4w_mn": -452.3,
       "flow_1w_mn": 45.9,
@@ -885,9 +890,9 @@
     {
       "ticker": "SPY",
       "name": "\ud83c\uddfa\ud83c\uddf8 US",
-      "ret_1m": 5.2,
-      "ret_3m": 9.6,
-      "rs_vs_vt": 0.9,
+      "ret_1m": 5.3,
+      "ret_3m": 10.5,
+      "rs_vs_vt": 0.7,
       "rs_vs_spy": 0.0,
       "ma_signal": "insufficient",
       "flow_4w_mn": 5009.5,
@@ -898,10 +903,10 @@
     {
       "ticker": "EWJ",
       "name": "\ud83c\uddef\ud83c\uddf5 Japan",
-      "ret_1m": 5.2,
-      "ret_3m": 0.2,
-      "rs_vs_vt": 0.9,
-      "rs_vs_spy": -0.0,
+      "ret_1m": 4.3,
+      "ret_3m": 3.1,
+      "rs_vs_vt": -0.2,
+      "rs_vs_spy": -0.9,
       "ma_signal": "insufficient",
       "flow_4w_mn": -283.7,
       "flow_1w_mn": 389.7,
@@ -911,10 +916,10 @@
     {
       "ticker": "EWG",
       "name": "\ud83c\udde9\ud83c\uddea Germany",
-      "ret_1m": 2.4,
-      "ret_3m": -2.3,
-      "rs_vs_vt": -1.9,
-      "rs_vs_spy": -2.9,
+      "ret_1m": 2.8,
+      "ret_3m": 1.2,
+      "rs_vs_vt": -1.8,
+      "rs_vs_spy": -2.5,
       "ma_signal": "insufficient",
       "flow_4w_mn": -238.5,
       "flow_1w_mn": -37.7,
@@ -922,25 +927,12 @@
       "flow_dir": "outflow"
     },
     {
-      "ticker": "EWU",
-      "name": "\ud83c\uddec\ud83c\udde7 UK",
-      "ret_1m": 0.6,
-      "ret_3m": -1.7,
-      "rs_vs_vt": -3.7,
-      "rs_vs_spy": -4.6,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": 199.4,
-      "flow_1w_mn": 0.0,
-      "flow_accel": false,
-      "flow_dir": "inflow"
-    },
-    {
       "ticker": "EWW",
       "name": "\ud83c\uddf2\ud83c\uddfd Mexico",
-      "ret_1m": 0.2,
-      "ret_3m": -2.2,
-      "rs_vs_vt": -4.1,
-      "rs_vs_spy": -5.1,
+      "ret_1m": 2.6,
+      "ret_3m": -1.3,
+      "rs_vs_vt": -2.0,
+      "rs_vs_spy": -2.7,
       "ma_signal": "insufficient",
       "flow_4w_mn": -112.0,
       "flow_1w_mn": 40.3,
@@ -950,12 +942,77 @@
     {
       "ticker": "EWQ",
       "name": "\ud83c\uddeb\ud83c\uddf7 France",
-      "ret_1m": -0.1,
-      "ret_3m": -4.9,
-      "rs_vs_vt": -4.4,
-      "rs_vs_spy": -5.3,
+      "ret_1m": 1.4,
+      "ret_3m": -1.3,
+      "rs_vs_vt": -3.2,
+      "rs_vs_spy": -3.9,
       "ma_signal": "insufficient",
       "flow_4w_mn": 51.9,
+      "flow_1w_mn": 0.0,
+      "flow_accel": false,
+      "flow_dir": "inflow"
+    },
+    {
+      "ticker": "TLT",
+      "name": "\ud83d\udfe1 US 20yr Bond",
+      "ret_1m": 0.5,
+      "ret_3m": -3.6,
+      "rs_vs_vt": -4.0,
+      "rs_vs_spy": -4.7,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": -1207.6,
+      "flow_1w_mn": 129.7,
+      "flow_accel": true,
+      "flow_dir": "outflow"
+    },
+    {
+      "ticker": "IEF",
+      "name": "\ud83d\udfe1 US 7-10yr Bond",
+      "ret_1m": -0.0,
+      "ret_3m": -1.9,
+      "rs_vs_vt": -4.6,
+      "rs_vs_spy": -5.3,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": 370.2,
+      "flow_1w_mn": -934.9,
+      "flow_accel": false,
+      "flow_dir": "inflow"
+    },
+    {
+      "ticker": "EWU",
+      "name": "\ud83c\uddec\ud83c\udde7 UK",
+      "ret_1m": -0.5,
+      "ret_3m": -2.5,
+      "rs_vs_vt": -5.0,
+      "rs_vs_spy": -5.7,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": 199.4,
+      "flow_1w_mn": 0.0,
+      "flow_accel": false,
+      "flow_dir": "inflow"
+    },
+    {
+      "ticker": "VNM",
+      "name": "\ud83c\uddfb\ud83c\uddf3 Vietnam",
+      "ret_1m": -0.7,
+      "ret_3m": 0.4,
+      "rs_vs_vt": -5.3,
+      "rs_vs_spy": -6.0,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": -39.1,
+      "flow_1w_mn": -3.5,
+      "flow_accel": true,
+      "flow_dir": "outflow"
+    },
+    {
+      "ticker": "EWA",
+      "name": "\ud83c\udde6\ud83c\uddfa Australia",
+      "ret_1m": -0.8,
+      "ret_3m": -2.3,
+      "rs_vs_vt": -5.4,
+      "rs_vs_spy": -6.1,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": 5.5,
       "flow_1w_mn": 0.0,
       "flow_accel": false,
       "flow_dir": "inflow"
@@ -964,9 +1021,9 @@
       "ticker": "KSA",
       "name": "\ud83c\uddf8\ud83c\udde6 Saudi Arabia",
       "ret_1m": -0.9,
-      "ret_3m": 0.9,
-      "rs_vs_vt": -5.2,
-      "rs_vs_spy": -6.1,
+      "ret_3m": 5.9,
+      "rs_vs_vt": -5.5,
+      "rs_vs_spy": -6.2,
       "ma_signal": "insufficient",
       "flow_4w_mn": -15.8,
       "flow_1w_mn": 0.0,
@@ -974,90 +1031,12 @@
       "flow_dir": "outflow"
     },
     {
-      "ticker": "IEF",
-      "name": "\ud83d\udfe1 US 7-10yr Bond",
-      "ret_1m": -1.2,
-      "ret_3m": -2.7,
-      "rs_vs_vt": -5.5,
-      "rs_vs_spy": -6.5,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": 370.2,
-      "flow_1w_mn": -934.9,
-      "flow_accel": false,
-      "flow_dir": "inflow"
-    },
-    {
-      "ticker": "EWA",
-      "name": "\ud83c\udde6\ud83c\uddfa Australia",
-      "ret_1m": -1.7,
-      "ret_3m": -2.3,
-      "rs_vs_vt": -6.0,
-      "rs_vs_spy": -6.9,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": 5.5,
-      "flow_1w_mn": 0.0,
-      "flow_accel": false,
-      "flow_dir": "inflow"
-    },
-    {
-      "ticker": "TLT",
-      "name": "\ud83d\udfe1 US 20yr Bond",
-      "ret_1m": -1.8,
-      "ret_3m": -4.6,
-      "rs_vs_vt": -6.1,
-      "rs_vs_spy": -7.0,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": -1207.6,
-      "flow_1w_mn": 129.7,
-      "flow_accel": true,
-      "flow_dir": "outflow"
-    },
-    {
-      "ticker": "INDA",
-      "name": "\ud83c\uddee\ud83c\uddf3 India",
-      "ret_1m": -2.1,
-      "ret_3m": -8.0,
-      "rs_vs_vt": -6.4,
-      "rs_vs_spy": -7.3,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": -1558.6,
-      "flow_1w_mn": -384.5,
-      "flow_accel": true,
-      "flow_dir": "outflow"
-    },
-    {
-      "ticker": "VNM",
-      "name": "\ud83c\uddfb\ud83c\uddf3 Vietnam",
-      "ret_1m": -2.1,
-      "ret_3m": -2.5,
-      "rs_vs_vt": -6.4,
-      "rs_vs_spy": -7.3,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": -39.1,
-      "flow_1w_mn": -3.5,
-      "flow_accel": true,
-      "flow_dir": "outflow"
-    },
-    {
-      "ticker": "MCHI",
-      "name": "\ud83c\udde8\ud83c\uddf3 China",
-      "ret_1m": -3.0,
-      "ret_3m": -8.6,
-      "rs_vs_vt": -7.3,
-      "rs_vs_spy": -8.3,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": 66.3,
-      "flow_1w_mn": 0.0,
-      "flow_accel": false,
-      "flow_dir": "inflow"
-    },
-    {
       "ticker": "GLD",
       "name": "\ud83e\udd47 Gold",
-      "ret_1m": -4.0,
-      "ret_3m": -14.0,
-      "rs_vs_vt": -8.3,
-      "rs_vs_spy": -9.2,
+      "ret_1m": -1.5,
+      "ret_3m": -14.9,
+      "rs_vs_vt": -6.1,
+      "rs_vs_spy": -6.8,
       "ma_signal": "insufficient",
       "flow_4w_mn": -3611.4,
       "flow_1w_mn": 211.6,
@@ -1065,12 +1044,38 @@
       "flow_dir": "outflow"
     },
     {
+      "ticker": "INDA",
+      "name": "\ud83c\uddee\ud83c\uddf3 India",
+      "ret_1m": -1.7,
+      "ret_3m": -4.7,
+      "rs_vs_vt": -6.3,
+      "rs_vs_spy": -7.0,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": -1558.6,
+      "flow_1w_mn": -384.5,
+      "flow_accel": true,
+      "flow_dir": "outflow"
+    },
+    {
+      "ticker": "MCHI",
+      "name": "\ud83c\udde8\ud83c\uddf3 China",
+      "ret_1m": -4.3,
+      "ret_3m": -5.8,
+      "rs_vs_vt": -8.9,
+      "rs_vs_spy": -9.6,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": 66.3,
+      "flow_1w_mn": 0.0,
+      "flow_accel": false,
+      "flow_dir": "inflow"
+    },
+    {
       "ticker": "EWZ",
       "name": "\ud83c\udde7\ud83c\uddf7 Brazil",
-      "ret_1m": -9.3,
-      "ret_3m": -6.2,
-      "rs_vs_vt": -13.6,
-      "rs_vs_spy": -14.5,
+      "ret_1m": -9.5,
+      "ret_3m": -7.1,
+      "rs_vs_vt": -14.1,
+      "rs_vs_spy": -14.8,
       "ma_signal": "insufficient",
       "flow_4w_mn": 774.6,
       "flow_1w_mn": 686.2,
