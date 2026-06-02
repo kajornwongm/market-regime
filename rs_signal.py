@@ -11,8 +11,8 @@ Output:
 
 Strategy:
     L1: 14 country ETFs + TLT + IEF + GLD vs VT → hold top 2
-    L2: 11 sector ETFs vs SPY → drill down when SPY = L1 signal
-    Binary filter: if signal clarity score < 5.5 → cash 100%
+    L2: 11 sector ETFs vs SPY → drill down when VOO (US large-cap) = L1 signal
+    Binary filter: DISABLED 2026-05 (clarity gate validated as harmful)
     Cost model: Webull 0.107% buy / ~0.109% sell
 """
 
@@ -38,8 +38,11 @@ PREV_PATH    = DATA_DIR / "rs_previous.json"
 # CONFIG — edit here if universe/params change
 # ══════════════════════════════════════════════════════
 L1_TICKERS = {
-    "SPY":  "🇺🇸 US",
-    "EWJ":  "🇯🇵 Japan",
+    # ── US (added QQQ, SMH 2026-05-09) ─────────────────────
+    "VOO":  "🇺🇸 US Large Cap",            # SPY→VOO 2026-06 (live: ER 0.03% vs 0.0945%, corr 0.998)
+    "QQQ":  "🇺🇸 US Tech (Nasdaq-100)",   # added 2026-05-09
+    "SMH":  "🇺🇸 US Semiconductors",       # added 2026-05-09
+    # ── Foreign country ETFs ───────────────────────────────
     "EWY":  "🇰🇷 Korea",
     "INDA": "🇮🇳 India",
     "EWG":  "🇩🇪 Germany",
@@ -47,18 +50,19 @@ L1_TICKERS = {
     "EWT":  "🇹🇼 Taiwan",
     "VNM":  "🇻🇳 Vietnam",
     "MCHI": "🇨🇳 China",
-    "EWA":  "🇦🇺 Australia",
-    "EWU":  "🇬🇧 UK",
     "EWQ":  "🇫🇷 France",
     "KSA":  "🇸🇦 Saudi Arabia",
     "EWW":  "🇲🇽 Mexico",
+    # ── Defensive ──────────────────────────────────────────
     "TLT":  "🟡 US 20yr Bond",
     "IEF":  "🟡 US 7-10yr Bond",
     "GLD":  "🥇 Gold",
+    # Removed 2026-05-09 (dead weight — rarely held in backtests):
+    #   EWJ (Japan), EWA (Australia), EWU (UK)
 }
 
 L2_TICKERS = {
-    "XLK":  "Technology",
+    "SMH":  "Semiconductors",     # replaced XLK 2026-05-09 (corr 0.877, SMH stronger)
     "XLF":  "Financials",
     "XLE":  "Energy",
     "XLV":  "Health Care",
@@ -79,16 +83,17 @@ ASSET_CLASS = {
 }
 
 L1_BENCHMARK  = "VT"
-L2_BENCHMARK  = "SPY"
+L2_BENCHMARK  = "SPY"   # sectors ranked vs SPY (longer data history than VOO)
+L2_TRIGGER    = "VOO"   # L1 US large-cap holding; winning this slot triggers sector drill-down
 L1_TOP_N      = 2
 L2_TOP_N      = 3
-SCORE_THRESH  = 5.5   # signal clarity threshold → cash if below
+SCORE_THRESH  = 5.5   # DISABLED 2026-05 (validated harmful). Score still shown, not enforced.
 
 # RS computation params
 LOOKBACK_MONTHS = 11   # months of momentum (skip 1)
 SKIP_MONTHS     = 1
-W_PRICE         = 0.65
-W_VOLUME        = 0.35
+W_PRICE         = 0.80   # was 0.65 — updated 2026-05-09 from vol_weight sweep
+W_VOLUME        = 0.20   # was 0.35 — peak found at 0.20 (CAGR 22.1%, Sharpe 1.03, MaxDD -21.3%)
 VOL_SHORT_WEEKS = 4
 VOL_LONG_WEEKS  = 13
 
@@ -106,6 +111,7 @@ def download_data(start_date="2014-01-01"):
     all_tickers = (
         list(L1_TICKERS.keys())
         + list(L2_TICKERS.keys())
+        + list(THEME_TICKERS.keys())   # theme watchlist (monitoring only)
         + [L1_BENCHMARK, L2_BENCHMARK]
     )
     all_tickers = list(dict.fromkeys(all_tickers))  # dedupe
@@ -192,6 +198,111 @@ def combine_rs(price_rs, vol_trend, tickers, w_price=0.65, w_vol=0.35):
 
 
 # ══════════════════════════════════════════════════════
+# THEME WATCHLIST (monitoring only — NOT tradeable)
+# ══════════════════════════════════════════════════════
+# ─────────────────────────────────────────────────────────────────────
+# THEME WATCHLIST — monitoring only, NOT part of tradeable L1/L2 universe
+# ─────────────────────────────────────────────────────────────────────
+#
+# Tracks thematic ETFs that are currently trending vs SPY. A theme must
+# show PERSISTENT outperformance before it qualifies for promotion into
+# the tradeable universe (aligns with the 11-month RS lookback philosophy:
+# a real trend persists; a spike does not).
+#
+# PROMOTION RULE (matches strategy's momentum thesis):
+#   A theme is "PROMOTION CANDIDATE" only if it has outperformed SPY
+#   (RS > 1.0) for >= PERSISTENCE_MONTHS consecutive months.
+#   Until then it is "WATCH" (interesting but unproven) or "EMERGING".
+#
+# These ETFs are NEVER auto-traded. This is a research signal for the
+# human to decide whether to run a full validation (sweep + correlation
+# + backtest) before adding to L1/L2.
+
+THEME_TICKERS = {
+    "SMH":  "🔬 Semiconductors",        # NOTE: already in L1/L2 — shown for reference
+    "BOTZ": "🤖 Robotics & AI",
+    "CIBR": "🔒 Cybersecurity",
+    "SKYY": "☁️ Cloud Computing",
+    "TAN":  "☀️ Solar",
+    "LIT":  "🔋 Lithium & Battery",
+    "PAVE": "🏗️ US Infrastructure",
+    "URA":  "⚛️ Uranium / Nuclear",
+    "FINX": "💳 FinTech",
+    "ARKK": "🚀 Disruptive Innovation",
+    "IBB":  "🧬 Biotech",
+    "XLE":  "🛢️ Energy",                # NOTE: already in L2 — reference
+}
+
+# Themes already in tradeable universe (exclude from "new candidate" alerts)
+THEME_IN_UNIVERSE = {"SMH", "XLE"}
+
+PERSISTENCE_MONTHS = 6   # min consecutive months RS>1.0 to be promotion candidate
+                         # (6-12 range discussed; 6 = minimum bar, aligns w/ half the
+                         #  11-month lookback. Raise to 9-12 for stricter promotion.)
+
+THEME_BENCHMARK = "SPY"  # themes ranked vs US large-cap (most are US-listed growth)
+
+
+def analyze_themes(price, theme_tickers, benchmark, lookback_months,
+                   skip_months, persistence_months):
+    """Compute RS for theme ETFs + persistence (consecutive months RS>1.0).
+    Returns list of dicts, does NOT affect any trading decision."""
+    theme_list = [t for t in theme_tickers if t in price.columns]
+    if benchmark not in price.columns or len(theme_list) == 0:
+        return []
+
+    # Monthly RS series for each theme (reuse calc_price_rs)
+    rs_df = calc_price_rs(price, theme_list, benchmark,
+                          lookback_months, skip_months)
+    if rs_df is None or rs_df.empty:
+        return []
+
+    latest = rs_df.index[-1]
+    results = []
+    for t in theme_list:
+        if t not in rs_df.columns:
+            continue
+        series = rs_df[t].dropna()
+        if len(series) == 0:
+            continue
+        current_rs = float(series.iloc[-1])
+
+        # Persistence: count consecutive months (from latest backwards) RS>1.0
+        streak = 0
+        for v in reversed(series.values):
+            if v > 1.0:
+                streak += 1
+            else:
+                break
+
+        # Classification
+        in_univ = t in THEME_IN_UNIVERSE
+        if in_univ:
+            status = "IN UNIVERSE"
+        elif streak >= persistence_months:
+            status = "★ PROMOTION CANDIDATE"
+        elif current_rs > 1.0 and streak >= 3:
+            status = "EMERGING"
+        elif current_rs > 1.0:
+            status = "WATCH"
+        else:
+            status = "underperform"
+
+        results.append({
+            "ticker": t,
+            "name": theme_tickers.get(t, t),
+            "rs": round(current_rs, 4),
+            "streak_months": streak,
+            "outperforms": current_rs > 1.0,
+            "status": status,
+            "in_universe": in_univ,
+        })
+
+    results.sort(key=lambda x: x["rs"], reverse=True)
+    return results
+
+
+# ══════════════════════════════════════════════════════
 # SIGNAL CLARITY SCORE
 # ══════════════════════════════════════════════════════
 def compute_clarity_score(rs_score, vol_trend, holdings, prev_holdings_list,
@@ -203,7 +314,7 @@ def compute_clarity_score(rs_score, vol_trend, holdings, prev_holdings_list,
     3. Volume confirmation (25%)
     """
     if not holdings:
-        return 0.0, 0.0, 0.0, 0.0, 1.0, 0
+        return 0.0, 0.0, 0.0, 0.0
 
     latest_date = rs_score.index[-1]
 
@@ -234,7 +345,7 @@ def compute_clarity_score(rs_score, vol_trend, holdings, prev_holdings_list,
     c_volume = vol_confirm * 10
 
     composite = w_margin * c_margin + w_consistency * c_consistency + w_volume * c_volume
-    return round(composite, 2), round(c_margin, 2), round(c_consistency, 2), round(c_volume, 2), round(avg_rs, 4), int(streak)
+    return round(composite, 2), round(c_margin, 2), round(c_consistency, 2), round(c_volume, 2)
 
 
 # ══════════════════════════════════════════════════════
@@ -253,39 +364,24 @@ def get_current_signal(l1_rs, l2_rs, prev_holdings_list, vol_trend):
     l1_scores = l1_rs.loc[latest, l1_tickers].dropna().sort_values(ascending=False)
     l1_outperform = l1_scores[l1_scores > 1.0]
 
-    # Compute clarity score from prospective top holdings (current RS leaders)
-    # NOT from prev_hold — avoids 0.0 score on first run when history is empty
-    prospective_hold = list(l1_outperform.head(L1_TOP_N).index) if len(l1_outperform) > 0 else []
-    prev_hold        = prev_holdings_list[-1] if prev_holdings_list else []
-    score, c_margin, c_cons, c_vol, avg_rs, streak = compute_clarity_score(
-        l1_rs, vol_trend,
-        prospective_hold if prospective_hold else prev_hold,
-        prev_holdings_list[:-1]
+    # Check clarity score using previous month signal (avoid look-ahead)
+    prev_hold = prev_holdings_list[-1] if prev_holdings_list else []
+    score, c_margin, c_cons, c_vol = compute_clarity_score(
+        l1_rs, vol_trend, prev_hold, prev_holdings_list[:-1]
     )
 
-    # Apply binary filter ONLY after 3+ months of history (warmup bypass)
-    WARMUP_MONTHS = 3
-    has_history   = len(prev_holdings_list) >= WARMUP_MONTHS
-    if has_history and score < SCORE_THRESH:
-        return {
-            "mode": "CASH",
-            "reason": f"Signal clarity {score:.2f} < threshold {SCORE_THRESH}",
-            "l1_top": [],
-            "final_holdings": [],
-            "sells": [],
-            "buys": [],
-            "l2_active": False,
-            "clarity_score": round(score, 2),
-            "clarity_components": {
-                "margin":      round(c_margin, 2),
-                "consistency": round(c_cons, 2),
-                "volume":      round(c_vol, 2),
-                "avg_rs":      round(avg_rs, 4),
-                "streak":      streak,
-                "threshold":   SCORE_THRESH,
-            },
-        }
-
+    # ─────────────────────────────────────────────────────────────────
+    # CLARITY GATE DISABLED 2026-05 — validated as HARMFUL via backtest.
+    # Threshold-5.5 sweep (123 months, lean+QQQ+SMH, vol_weight=0.20):
+    #   no-gate  : CAGR 22.1%  Sharpe 1.03  MaxDD -21.3%
+    #   th=5.5   : CAGR 13.7%  Sharpe 0.71  MaxDD -30.2%  (fired 24 mo)
+    # Gate cashes out at rotation points (low consistency) which coincide
+    # with market bottoms → sells at bottom, misses recovery, raises DD.
+    # NO threshold beat the no-gate baseline. Score is still computed below
+    # for dashboard/audit display, but it NEVER forces cash.
+    #   To re-enable (NOT recommended): restore the `if score < SCORE_THRESH`
+    #   block from git history.
+    # ─────────────────────────────────────────────────────────────────
 
     if len(l1_outperform) == 0:
         return {
@@ -302,14 +398,14 @@ def get_current_signal(l1_rs, l2_rs, prev_holdings_list, vol_trend):
 
     l1_top = list(l1_outperform.head(L1_TOP_N).index)
 
-    # L2 drill-down when SPY in L1 top
+    # L2 drill-down when VOO (US large-cap) in L1 top
     final_holdings = []
     l2_active = False
     l2_sectors = []
     slot_weight = 1.0 / L1_TOP_N
 
     for ticker in l1_top:
-        if ticker == L2_BENCHMARK and latest in l2_rs.index:
+        if ticker == L2_TRIGGER and latest in l2_rs.index:
             # Drill into sectors
             l2_scores = l2_rs.loc[latest, l2_tickers].dropna().sort_values(ascending=False)
             l2_out = l2_scores[l2_scores > 1.0]
@@ -500,6 +596,22 @@ def main():
     # 5. DD context
     dd_ctx = compute_dd_context(price, L1_BENCHMARK)
 
+    # 5b. Theme watchlist (monitoring only — NEVER affects holdings)
+    print("Analyzing theme watchlist (monitoring only)...")
+    theme_watchlist = analyze_themes(
+        price, THEME_TICKERS, THEME_BENCHMARK,
+        LOOKBACK_MONTHS, SKIP_MONTHS, PERSISTENCE_MONTHS,
+    )
+    theme_candidates = [t for t in theme_watchlist
+                        if t["status"] == "★ PROMOTION CANDIDATE"]
+    if theme_candidates:
+        print(f"  {len(theme_candidates)} theme(s) passed {PERSISTENCE_MONTHS}mo persistence "
+              f"(candidates for validation, NOT auto-traded):")
+        for t in theme_candidates:
+            print(f"    {t['ticker']} ({t['name']}): RS {t['rs']}, {t['streak_months']}mo streak")
+    else:
+        print(f"  No themes meet the {PERSISTENCE_MONTHS}-month persistence bar yet.")
+
     # 6. Assemble output
     current_holdings = [h["ticker"] for h in signal.get("final_holdings", [])]
     holdings_history = (prev_holdings_list + [current_holdings])[-13:]  # keep 13m
@@ -510,6 +622,7 @@ def main():
         "signal":       signal,
         "est_cost_usd": est_cost,
         "dd_context":   dd_ctx,
+        "theme_watchlist": theme_watchlist,   # monitoring only — separate from holdings
         "portfolio_size": PORTFOLIO_SIZE,
         "holdings_history": holdings_history,
         "prev_holdings":  prev.get("final_holdings", []),
@@ -541,7 +654,7 @@ def main():
         print(f"  L2 active: {signal['l2_active']}" + (f" → {signal['l2_sectors']}" if signal['l2_active'] else ""))
         print(f"  SELL     : {signal['sells'] or '—'}")
         print(f"  BUY      : {signal['buys'] or '—'}")
-    print(f"  Clarity  : {signal['clarity_score']} ({'PASS' if signal['clarity_score'] >= SCORE_THRESH else 'FAIL — cash'})")
+    print(f"  Clarity  : {signal['clarity_score']} (informational only — gate disabled)")
     print(f"  Est cost : ${est_cost}")
     print(f"  DD now   : {dd_ctx.get('current','—')}%  (max {dd_ctx.get('max','—')}%,  {dd_ctx.get('duration_m','—')}m)")
     print(f"{'='*55}")
