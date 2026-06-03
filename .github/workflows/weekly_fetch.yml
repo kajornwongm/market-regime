@@ -2,9 +2,9 @@ name: Market Regime Weekly Update
 
 on:
   schedule:
-    - cron: "0 14 * * 6"   # ทุกวันเสาร์ 14:00 UTC (21:00 Bangkok)
-                             # หลังจาก etfdb.com อัปเดต flow data สัปดาห์นั้น
-  workflow_dispatch:         # รันด้วยมือได้ทุกเมื่อ (เช่น หลัง upload CSV ใหม่)
+    - cron: "0 14 * * 6"   # Saturday 14:00 UTC (21:00 Bangkok)
+                             # after etfdb.com updates weekly flow data
+  workflow_dispatch:         # manual trigger (e.g. after uploading new CSV)
 
 jobs:
   fetch:
@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: pip install yfinance pandas numpy
 
-      - name: Run fetch.py (regime + flow)
+      - name: Run fetch.py (ETF flow data + regime)
         run: python fetch.py
 
       - name: Commit & push
@@ -30,18 +30,15 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/latest.json data/flows/
-          git diff --staged --quiet || git commit -m "data: weekly regime update $(date -u '+%Y-%m-%d')"
+          git diff --staged --quiet || git commit -m "data: weekly flow update $(date -u '+%Y-%m-%d')"
           git push
 
 # ─────────────────────────────────────────────────────
-# rs_signal.py — run manually every month-end
+# This workflow produces ETF flow data (data/latest.json) consumed by the
+# dashboard Flow tab. The RS rotation signal is handled separately by
+# monthly_fetch.yml (auto-runs rs_signal.py → data/rs_latest.json).
 #
-# ทุกสิ้นเดือน (ทำเอง ไม่ใช่ automation):
-#   1. python rs_signal.py
-#   2. git add data/rs_latest.json data/rs_YYYYMMDD.json
-#   3. git commit -m "signal: YYYY-MM rotation"
-#   4. git push
-#
-# เหตุผล: rs_signal.py ต้องการ review ก่อน execute trade
-#         ไม่ควร auto-push โดยไม่มีคนดู
+# Two independent data feeds, two independent files:
+#   fetch.py     → data/latest.json    (flow + regime, weekly)
+#   rs_signal.py → data/rs_latest.json (RS rotation signal, monthly)
 # ─────────────────────────────────────────────────────
