@@ -476,6 +476,8 @@
 ═══════════════════════════════════════════════════ -->
 <div id="tab-flow" class="page">
 
+  <div id="flow-meta" style="font-size:11px;color:var(--text3);margin-bottom:10px"></div>
+
   <div class="sec">Asset class flow</div>
   <div class="flow-section">
     <div class="flow-title">Asset class flow</div>
@@ -483,15 +485,14 @@
       <button class="period-btn active" onclick="setFlowPeriod('4w',this)">4 weeks</button>
       <button class="period-btn" onclick="setFlowPeriod('1w',this)">1 week</button>
       <button class="period-btn" onclick="setFlowPeriod('ytd',this)">YTD</button>
-      <button class="period-btn" onclick="setFlowPeriod('1y',this)">1 year</button>
     </div>
-    <div style="font-size:11px;color:var(--text3)">Flow data requires ETF AUM API integration. Connect a data source to populate.</div>
+    <div id="asset-flow-body"><div style="font-size:11px;color:var(--text3)">— awaiting data —</div></div>
   </div>
 
   <div class="sec">Country ETF flow</div>
   <div class="flow-section">
     <div class="flow-title">Country ETF flow — top inflow / top outflow</div>
-    <div class="grid2">
+    <div class="grid2" id="country-flow-body">
       <div><div style="font-size:10px;color:var(--green);margin-bottom:6px;letter-spacing:.05em">TOP INFLOW</div><div style="font-size:11px;color:var(--text3)">— awaiting data —</div></div>
       <div><div style="font-size:10px;color:var(--red);margin-bottom:6px;letter-spacing:.05em">TOP OUTFLOW</div><div style="font-size:11px;color:var(--text3)">— awaiting data —</div></div>
     </div>
@@ -500,7 +501,7 @@
   <div class="sec">Sector / theme flow</div>
   <div class="flow-section">
     <div class="flow-title">Sector / theme flow</div>
-    <div class="grid2">
+    <div class="grid2" id="sector-flow-body">
       <div><div style="font-size:10px;color:var(--green);margin-bottom:6px;letter-spacing:.05em">TOP INFLOW</div><div style="font-size:11px;color:var(--text3)">— awaiting data —</div></div>
       <div><div style="font-size:10px;color:var(--red);margin-bottom:6px;letter-spacing:.05em">TOP OUTFLOW</div><div style="font-size:11px;color:var(--text3)">— awaiting data —</div></div>
     </div>
@@ -1003,10 +1004,123 @@ function removeHolding(tk) { if(confirm('Remove '+tk+'?')){ delete holdings[tk];
 // ══════════════════════════════════════════════════════
 // FLOW PERIOD
 // ══════════════════════════════════════════════════════
-function setFlowPeriod(p, btn) {
-  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+// ══════════════════════════════════════════════════════
+// ETF FLOW DATA — reads data/latest.json (from fetch.py)
+// Independent of rs_latest.json. Shows asset/country/sector flows.
+// ══════════════════════════════════════════════════════
+let FLOW_DATA = null;
+let FLOW_PERIOD = '4w';   // '4w' | '1w' | 'ytd'
+
+function flowField(period) {
+  return period === '1w' ? 'flow_1w_mn'
+       : period === 'ytd' ? 'flow_ytd_mn'
+       : 'flow_4w_mn';
 }
+
+function fmtFlow(mn) {
+  // mn is in $millions
+  if (mn == null || isNaN(mn)) return '—';
+  const sign = mn >= 0 ? '+' : '−';
+  const abs = Math.abs(mn);
+  if (abs >= 1000) return sign + '$' + (abs / 1000).toFixed(1) + 'B';
+  return sign + '$' + abs.toFixed(0) + 'M';
+}
+
+async function loadFlowData() {
+  try {
+    const resp = await fetch('data/latest.json?_=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    FLOW_DATA = await resp.json();
+    console.log('Loaded flow data:', FLOW_DATA.flow_date);
+  } catch (e) {
+    console.warn('Could not load data/latest.json — flow tab will show awaiting.', e);
+    FLOW_DATA = null;
+  }
+  renderFlows();
+}
+
+function renderFlows() {
+  const meta = document.getElementById('flow-meta');
+  if (!FLOW_DATA || !FLOW_DATA.flow_updated) {
+    if (meta) meta.textContent = FLOW_DATA
+      ? 'Flow data present but empty — check data/flows/ CSVs.'
+      : 'Flow data not loaded (data/latest.json missing).';
+    return;
+  }
+  if (meta) {
+    meta.textContent = 'Flow data as of ' + (FLOW_DATA.flow_date || '?')
+      + ' · ' + (FLOW_DATA.n_flow_tickers || 0) + ' ETFs tracked';
+  }
+
+  const fld = flowField(FLOW_PERIOD);
+
+  // ── Asset class flow ──
+  const af = FLOW_DATA.asset_flows || {};
+  const assetRows = Object.entries(af)
+    .map(([ac, d]) => ({ name: ac, val: d[fld], n: d.n_etfs,
+                          nin: d.n_inflow, nout: d.n_outflow }))
+    .sort((a, b) => b.val - a.val);
+  const assetBody = document.getElementById('asset-flow-body');
+  if (assetBody) {
+    if (assetRows.length === 0) {
+      assetBody.innerHTML = '<div style="font-size:11px;color:var(--text3)">— no asset flow data —</div>';
+    } else {
+      const maxAbs = Math.max(...assetRows.map(r => Math.abs(r.val)), 1);
+      assetBody.innerHTML = assetRows.map(r => {
+        const pct = Math.abs(r.val) / maxAbs * 100;
+        const col = r.val >= 0 ? 'var(--green)' : 'var(--red)';
+        return `<div style="margin:7px 0">
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">
+            <span style="color:var(--text)">${r.name}</span>
+            <span style="color:${col};font-weight:600">${fmtFlow(r.val)}</span>
+          </div>
+          <div style="height:5px;background:var(--bg3);border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${col};opacity:.7"></div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // ── Country flow (top inflow / outflow) ──
+  renderFlowSplit('country-flow-body', FLOW_DATA.country_flows || [], fld);
+  // ── Sector flow ──
+  renderFlowSplit('sector-flow-body', FLOW_DATA.sector_flows || [], fld);
+}
+
+function renderFlowSplit(elemId, rows, fld) {
+  const el = document.getElementById(elemId);
+  if (!el) return;
+  if (!rows || rows.length === 0) {
+    el.innerHTML = '<div><div style="font-size:10px;color:var(--green);margin-bottom:6px;letter-spacing:.05em">TOP INFLOW</div><div style="font-size:11px;color:var(--text3)">— no data —</div></div>'
+                 + '<div><div style="font-size:10px;color:var(--red);margin-bottom:6px;letter-spacing:.05em">TOP OUTFLOW</div><div style="font-size:11px;color:var(--text3)">— no data —</div></div>';
+    return;
+  }
+  const sorted = [...rows].sort((a, b) => (b[fld] ?? 0) - (a[fld] ?? 0));
+  const inflow = sorted.filter(r => (r[fld] ?? 0) > 0).slice(0, 6);
+  const outflow = sorted.filter(r => (r[fld] ?? 0) < 0).slice(-6).reverse();
+
+  const row = (r, col) => `<div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 0">
+      <span style="color:var(--text2)">${r.name || r.ticker} <span style="color:var(--text3)">${r.ticker}</span></span>
+      <span style="color:${col};font-weight:600">${fmtFlow(r[fld])}</span>
+    </div>`;
+
+  el.innerHTML =
+    `<div><div style="font-size:10px;color:var(--green);margin-bottom:6px;letter-spacing:.05em">TOP INFLOW</div>${
+      inflow.length ? inflow.map(r => row(r, 'var(--green)')).join('') : '<div style="font-size:11px;color:var(--text3)">— none —</div>'
+    }</div>` +
+    `<div><div style="font-size:10px;color:var(--red);margin-bottom:6px;letter-spacing:.05em">TOP OUTFLOW</div>${
+      outflow.length ? outflow.map(r => row(r, 'var(--red)')).join('') : '<div style="font-size:11px;color:var(--text3)">— none —</div>'
+    }</div>`;
+}
+
+function setFlowPeriod(p, btn) {
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  FLOW_PERIOD = p;
+  renderFlows();
+}
+
 
 // ══════════════════════════════════════════════════════
 // TAB SWITCHING
@@ -1230,6 +1344,8 @@ async function loadData() {
   }
   // Render with whatever data we have (live or fallback)
   renderAll();
+  // Flow data is independent (from fetch.py's latest.json)
+  loadFlowData();
 }
 
 function renderAll() {
