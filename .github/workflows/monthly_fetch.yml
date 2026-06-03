@@ -2,10 +2,8 @@ name: RS Rotation Signal (Monthly)
 
 on:
   schedule:
-    - cron: "0 15 28-31 * *"   # 15:00 UTC ของวันที่ 28-31 ทุกเดือน
-                                 # รันทุกวันช่วงสิ้นเดือน แต่ไม่เป็นปัญหา
-                                 # เพราะ rs_signal.py idempotent — รันซ้ำได้
-  workflow_dispatch:             # กดมือได้ด้วยถ้าต้องการรันทันที
+    - cron: "0 15 28-31 * *"   # 15:00 UTC on 28-31 each month (idempotent — safe to re-run)
+  workflow_dispatch:             # manual trigger available
 
 jobs:
   signal:
@@ -25,6 +23,27 @@ jobs:
 
       - name: Run rs_signal.py (RS rotation signal)
         run: python rs_signal.py
+
+      - name: Sanity check output
+        run: |
+          # Fail loudly if the signal JSON is missing or malformed,
+          # so a bad run does NOT silently push stale/empty data to the dashboard.
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          p = Path("data/rs_latest.json")
+          if not p.exists():
+              print("ERROR: data/rs_latest.json was not created"); sys.exit(1)
+          d = json.loads(p.read_text())
+          sig = d.get("signal", {})
+          # Must have a ranking and a mode
+          if not sig.get("l1_ranking"):
+              print("ERROR: l1_ranking empty"); sys.exit(1)
+          if sig.get("mode") not in ("ACTIVE", "CASH"):
+              print(f"ERROR: unexpected mode {sig.get('mode')!r}"); sys.exit(1)
+          print(f"OK: mode={sig['mode']}, {len(sig['l1_ranking'])} L1 ranked, "
+                f"holdings={[h['ticker'] for h in sig.get('final_holdings',[])]}")
+          PY
 
       - name: Commit & push
         run: |
