@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-03T02:15:11.960658Z",
+  "generated_at": "2026-06-03T09:15:59.354676Z",
   "date": "2026-06-03",
   "signal": {
     "mode": "ACTIVE",
@@ -20,25 +20,25 @@
       }
     ],
     "sells": [],
-    "buys": [
+    "buys": [],
+    "holds": [
       "EWY",
       "SMH"
     ],
-    "holds": [],
     "l2_active": false,
     "l2_sectors": [],
     "l1_ranking": [
       {
         "ticker": "EWY",
         "name": "\ud83c\uddf0\ud83c\uddf7 Korea",
-        "rs": 2.0446,
+        "rs": 2.0455,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "SMH",
         "name": "\ud83c\uddfa\ud83c\uddf8 US Semiconductors",
-        "rs": 1.5946,
+        "rs": 1.5947,
         "asset_class": "equity",
         "outperforms": true
       },
@@ -52,14 +52,14 @@
       {
         "ticker": "EWZ",
         "name": "\ud83c\udde7\ud83c\uddf7 Brazil",
-        "rs": 1.0147,
+        "rs": 1.0157,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "QQQ",
         "name": "\ud83c\uddfa\ud83c\uddf8 US Tech (Nasdaq-100)",
-        "rs": 1.01,
+        "rs": 1.0102,
         "asset_class": "equity",
         "outperforms": true
       },
@@ -73,35 +73,35 @@
       {
         "ticker": "GLD",
         "name": "\ud83e\udd47 Gold",
-        "rs": 0.9975,
+        "rs": 0.9976,
         "asset_class": "gold",
         "outperforms": false
       },
       {
         "ticker": "EWW",
         "name": "\ud83c\uddf2\ud83c\uddfd Mexico",
-        "rs": 0.9876,
+        "rs": 0.9879,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "VOO",
         "name": "\ud83c\uddfa\ud83c\uddf8 US Large Cap",
-        "rs": 0.9291,
+        "rs": 0.9294,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "EWQ",
         "name": "\ud83c\uddeb\ud83c\uddf7 France",
-        "rs": 0.8482,
+        "rs": 0.8486,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "MCHI",
         "name": "\ud83c\udde8\ud83c\uddf3 China",
-        "rs": 0.8239,
+        "rs": 0.824,
         "asset_class": "equity",
         "outperforms": false
       },
@@ -129,14 +129,14 @@
       {
         "ticker": "EWG",
         "name": "\ud83c\udde9\ud83c\uddea Germany",
-        "rs": 0.7601,
+        "rs": 0.7603,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "INDA",
         "name": "\ud83c\uddee\ud83c\uddf3 India",
-        "rs": 0.703,
+        "rs": 0.7031,
         "asset_class": "equity",
         "outperforms": false
       }
@@ -145,25 +145,25 @@
       {
         "ticker": "SMH",
         "name": "Semiconductors",
-        "rs": 1.6087,
+        "rs": 1.6088,
         "outperforms": true
       },
       {
         "ticker": "XLE",
         "name": "Energy",
-        "rs": 1.03,
+        "rs": 1.0303,
         "outperforms": true
       },
       {
         "ticker": "GLD",
         "name": "\ud83e\udd47 Gold",
-        "rs": 1.0065,
+        "rs": 1.0066,
         "outperforms": true
       },
       {
         "ticker": "XLB",
         "name": "Materials",
-        "rs": 0.9393,
+        "rs": 0.9396,
         "outperforms": false
       },
       {
@@ -181,25 +181,25 @@
       {
         "ticker": "XLV",
         "name": "Health Care",
-        "rs": 0.8965,
+        "rs": 0.8966,
         "outperforms": false
       },
       {
         "ticker": "XLY",
         "name": "Cons. Discretionary",
-        "rs": 0.8893,
+        "rs": 0.8897,
         "outperforms": false
       },
       {
         "ticker": "XLC",
         "name": "Communication",
-        "rs": 0.8523,
+        "rs": 0.8527,
         "outperforms": false
       },
       {
         "ticker": "XLRE",
         "name": "Real Estate",
-        "rs": 0.8466,
+        "rs": 0.8469,
         "outperforms": false
       },
       {
@@ -217,7 +217,7 @@
       {
         "ticker": "XLF",
         "name": "Financials",
-        "rs": 0.8014,
+        "rs": 0.8018,
         "outperforms": false
       }
     ],
@@ -276,7 +276,7 @@
             2.1,
             1.62,
             1.89,
-            2.04
+            2.05
           ]
         },
         {
@@ -312,7 +312,7 @@
             1.17,
             1.14,
             1.17,
-            1.01
+            1.02
           ]
         },
         {
@@ -593,17 +593,17 @@
         }
       ]
     },
-    "clarity_score": 0.0,
+    "clarity_score": 6.3,
     "clarity_components": {
-      "margin": 0.0,
-      "consistency": 0.0,
-      "volume": 0.0,
-      "avg_rs": 1.0,
+      "margin": 10.0,
+      "consistency": 3.0,
+      "volume": 5.0,
+      "avg_rs": 1.8201,
       "streak": 0,
       "threshold": 5.5
     }
   },
-  "est_cost_usd": 32.1,
+  "est_cost_usd": 0.0,
   "dd_context": {
     "current": 0.0,
     "max": -34.24,
@@ -742,9 +742,24 @@
     [
       "EWY",
       "SMH"
+    ],
+    [
+      "EWY",
+      "SMH"
     ]
   ],
-  "prev_holdings": [],
+  "prev_holdings": [
+    {
+      "ticker": "EWY",
+      "weight": 0.5,
+      "layer": "L1"
+    },
+    {
+      "ticker": "SMH",
+      "weight": 0.5,
+      "layer": "L1"
+    }
+  ],
   "config": {
     "l1_top_n": 2,
     "l2_top_n": 3,
