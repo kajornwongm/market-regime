@@ -579,7 +579,7 @@
 // ══════════════════════════════════════════════════════
 // DATA — RS SIGNAL (update monthly)
 // ══════════════════════════════════════════════════════
-const SIGNAL = {
+let SIGNAL = {
   date: 'Apr 30, 2026',
   portfolioSize: 30000,
   // L1: country + TLT/GLD vs VT — top 2
@@ -603,7 +603,7 @@ const SIGNAL = {
 };
 
 // Country RS rankings (all assets)
-const COUNTRY_RS = [
+let COUNTRY_RS = [
   { ticker:'GLD',  name:'Gold',          rs:1.18, cls:'tk-gd' },
   { ticker:'SPY',  name:'US',            rs:1.09, cls:'tk-eq' },
   { ticker:'EWY',  name:'Korea',         rs:1.06, cls:'tk-eq' },
@@ -623,7 +623,7 @@ const COUNTRY_RS = [
   { ticker:'EWW',  name:'Mexico',        rs:0.76, cls:'tk-eq' },
 ];
 
-const SECTOR_RS = [
+let SECTOR_RS = [
   { ticker:'XLK',  name:'Technology',     rs:1.13, cls:'tk-sec' },
   { ticker:'XLF',  name:'Financials',     rs:1.07, cls:'tk-sec' },
   { ticker:'XLE',  name:'Energy',         rs:1.04, cls:'tk-sec' },
@@ -638,7 +638,7 @@ const SECTOR_RS = [
 ];
 
 // Heatmap data: [ticker, [rs values last 6m]] (oldest→newest)
-const COUNTRY_HM = [
+let COUNTRY_HM = [
   ['GLD', [1.09,1.10,1.21,1.33,1.45,1.18]],
   ['SPY', [1.06,1.00,1.01,1.05,0.97,1.09]],
   ['EWY', [1.04,1.02,1.03,1.06,1.05,1.06]],
@@ -648,7 +648,7 @@ const COUNTRY_HM = [
 ];
 const HM_MONTHS = ['Nov','Dec','Jan','Feb','Mar','Apr'];
 
-const SECTOR_HM = [
+let SECTOR_HM = [
   ['XLK', [1.13,1.08,1.06,1.09,0.95,1.13]],
   ['XLF', [1.04,1.07,1.12,1.05,1.03,1.07]],
   ['XLE', [0.94,0.99,0.97,1.06,1.11,1.04]],
@@ -658,7 +658,7 @@ const SECTOR_HM = [
 ];
 
 // Trade journal data
-const JOURNAL = [
+let JOURNAL = [
   { month:'Apr 2026', holdings:['GLD','XLK','XLF','XLE'], ret:null,  change:'SELL INDA · BUY GLD', changeType:'trade' },
   { month:'Mar 2026', holdings:['INDA','XLK','XLF','XLE'], ret:2.1,  change:'No change', changeType:'hold' },
   { month:'Feb 2026', holdings:['INDA','XLK','XLF','XLE'], ret:-1.4, change:'No change', changeType:'hold' },
@@ -669,7 +669,7 @@ const JOURNAL = [
 ];
 
 // DD context data
-const DD_CONTEXT = {
+let DD_CONTEXT = {
   current: -4.2,
   maxHistorical: -16.7,
   durationMonths: 2,
@@ -1021,7 +1021,7 @@ function switchTab(name) {
 // ══════════════════════════════════════════════════════
 // SCORE DATA (update monthly alongside SIGNAL)
 // ══════════════════════════════════════════════════════
-const SCORE_DATA = {
+let SCORE_DATA = {
   // Raw inputs
   avgRS: 1.135,          // avg RS of current held assets (GLD 1.18, avg XLK/XLF/XLE ~1.08)
   streak: 2,             // consecutive months same holdings
@@ -1093,17 +1093,159 @@ function renderScore() {
 }
 
 // ══════════════════════════════════════════════════════
-// INIT
+// LIVE DATA LOADER — fetches data/rs_latest.json (from rs_signal.py)
+// Maps JSON → dashboard variables, then renders. Falls back to
+// built-in sample data if fetch fails (e.g. opened as local file).
 // ══════════════════════════════════════════════════════
-loadPersist();
-renderDashboard();
-renderRSBars('country-rs-list', COUNTRY_RS, 'VT');
-renderRSBars('sector-rs-list', SECTOR_RS, 'SPY');
-renderHeatmap('country-heatmap', COUNTRY_HM, HM_MONTHS);
-renderHeatmap('sector-heatmap', SECTOR_HM, HM_MONTHS);
-renderJournal();
-renderHoldings();
-renderScore();
+const TK_CLASS = {
+  // map asset_class / ticker → existing CSS pill classes
+  bond: 'tk-bond', commodity: 'tk-gd', gold: 'tk-gd',
+};
+function tkClassFor(ticker, assetClass) {
+  if (ticker === 'GLD') return 'tk-gd';
+  if (ticker === 'TLT' || ticker === 'IEF') return 'tk-bond';
+  if (assetClass === 'bond') return 'tk-bond';
+  if (assetClass === 'commodity') return 'tk-gd';
+  return 'tk-eq';
+}
+function fmtDelta(cur, prev) {
+  if (prev == null || isNaN(prev)) return '—';
+  const d = cur - prev;
+  return (d >= 0 ? '+' : '') + d.toFixed(2);
+}
+
+function mapSignal(j) {
+  const sig = j.signal || {};
+  const port = j.portfolio_size || 30000;
+
+  // Date: prefer human-readable
+  let dateStr = j.date || '';
+  try {
+    dateStr = new Date(j.date).toLocaleDateString('en-US',
+      { month: 'short', day: 'numeric', year: 'numeric' });
+  } catch (e) {}
+
+  // Build a lookup of previous RS per ticker from heatmap (2nd-to-last col)
+  const prevRS = {};
+  (sig.l1_heatmap?.rows || []).forEach(r => {
+    if (r.values && r.values.length >= 2)
+      prevRS[r.ticker] = r.values[r.values.length - 2];
+  });
+
+  // ── COUNTRY_RS (full L1 ranking) ──
+  COUNTRY_RS = (sig.l1_ranking || []).map(r => ({
+    ticker: r.ticker, name: r.name, rs: r.rs,
+    cls: tkClassFor(r.ticker, r.asset_class),
+  }));
+
+  // ── SECTOR_RS (full L2 ranking) ──
+  SECTOR_RS = (sig.l2_ranking || []).map(r => ({
+    ticker: r.ticker, name: r.name, rs: r.rs, cls: 'tk-sec',
+  }));
+
+  // ── Heatmaps ──
+  const hmMonths = (sig.l1_heatmap?.months || []);
+  COUNTRY_HM = (sig.l1_heatmap?.rows || []).slice(0, 6).map(r => [r.ticker, r.values]);
+  SECTOR_HM  = (sig.l2_heatmap?.rows || []).slice(0, 6).map(r => [r.ticker, r.values]);
+  if (hmMonths.length) { HM_MONTHS = hmMonths.map(m => m.split(' ')[0]); }
+
+  // ── SIGNAL (trade instructions) ──
+  const finalHoldings = sig.final_holdings || [];
+  const l1Top = sig.l1_top || [];
+  const buys = new Set(sig.buys || []);
+  const sells = sig.sells || [];
+
+  // L1 action rows: each l1_top ticker → BUY (if new) / HOLD / drill
+  const l1Rows = [];
+  l1Top.forEach(tk => {
+    const rank = (sig.l1_ranking || []).find(x => x.ticker === tk) || {};
+    const isUSDrill = (tk === (j.config?.benchmark_l2 === 'SPY' ? 'VOO' : tk)) && sig.l2_active;
+    if (sig.l2_active && (tk === 'VOO' || tk === 'SPY')) {
+      l1Rows.push({
+        ticker: tk, name: 'US → L2 drill', rs: rank.rs,
+        tkClass: 'tk-eq', prev: '—', action: 'SPY_DRILL',
+      });
+    } else {
+      l1Rows.push({
+        ticker: tk, name: rank.name || tk, rs: rank.rs,
+        tkClass: tkClassFor(tk, rank.asset_class),
+        prev: fmtDelta(rank.rs, prevRS[tk]),
+        action: buys.has(tk) ? 'BUY' : 'HOLD',
+      });
+    }
+  });
+
+  // L2 rows (sectors) — top from l2_sectors or l2_ranking
+  const l2Rows = (sig.l2_sectors && sig.l2_sectors.length
+    ? sig.l2_sectors
+    : (sig.l2_ranking || []).slice(0, 3).map(r => r.ticker)
+  ).map(tk => {
+    const rank = (sig.l2_ranking || []).find(x => x.ticker === tk) || {};
+    return {
+      ticker: tk, name: rank.name || tk, rs: rank.rs || null,
+      tkClass: 'tk-sec', action: buys.has(tk) ? 'BUY' : 'HOLD',
+    };
+  });
+
+  // Sells: map ticker list → objects (rs from previous ranking if available)
+  const sellRows = sells.map(tk => {
+    const rank = (sig.l1_ranking || []).find(x => x.ticker === tk) || {};
+    return { ticker: tk, name: rank.name || tk, rs: rank.rs || 0,
+             shares: 0, price: 0 };
+  });
+
+  SIGNAL = {
+    date: dateStr,
+    portfolioSize: port,
+    l1: l1Rows,
+    l2: l2Rows,
+    sells: sellRows,
+    consequence: SIGNAL.consequence,  // keep existing copy
+  };
+
+  // ── DD_CONTEXT ──
+  if (j.dd_context) {
+    const dd = j.dd_context;
+    DD_CONTEXT = {
+      current:       dd.current ?? DD_CONTEXT.current,
+      maxHistorical: dd.max ?? DD_CONTEXT.maxHistorical,
+      durationMonths:dd.duration_m ?? DD_CONTEXT.durationMonths,
+      similarCount:  dd.similar_count ?? DD_CONTEXT.similarCount,
+      medianResolve: dd.median_resolve ?? DD_CONTEXT.medianResolve,
+      worstCase:     dd.worst_case ?? DD_CONTEXT.worstCase,
+      escalateRate:  dd.escalate_rate ?? DD_CONTEXT.escalateRate,
+    };
+  }
+}
+
+async function loadData() {
+  try {
+    const resp = await fetch('data/rs_latest.json?_=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const j = await resp.json();
+    mapSignal(j);
+    console.log('Loaded live data:', j.date);
+  } catch (e) {
+    console.warn('Could not load data/rs_latest.json — using built-in sample data.', e);
+  }
+  // Render with whatever data we have (live or fallback)
+  renderAll();
+}
+
+function renderAll() {
+  loadPersist();
+  renderDashboard();
+  renderRSBars('country-rs-list', COUNTRY_RS, 'VT');
+  renderRSBars('sector-rs-list', SECTOR_RS, 'SPY');
+  renderHeatmap('country-heatmap', COUNTRY_HM, HM_MONTHS);
+  renderHeatmap('sector-heatmap', SECTOR_HM, HM_MONTHS);
+  renderJournal();
+  renderHoldings();
+  renderScore();
+}
+
+loadData();
+
 </script>
 </body>
 </html>
