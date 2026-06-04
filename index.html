@@ -223,8 +223,8 @@
   <div class="sec">② Portfolio status</div>
   <div class="grid3" id="status-grid">
     <div class="mcard">
-      <div class="lbl">CAGR (after cost)</div>
-      <div class="val" style="color:var(--green)" id="stat-cagr">16.4%</div>
+      <div class="lbl">CAGR (backtest, static)</div>
+      <div class="val" style="color:var(--green)" id="stat-cagr">22.1%</div>
       <div class="sub">10.2 yr backtest</div>
     </div>
     <div class="mcard">
@@ -582,6 +582,7 @@
 // ══════════════════════════════════════════════════════
 let SIGNAL = {
   date: 'Apr 30, 2026',
+  mode: 'ACTIVE',
   portfolioSize: 30000,
   // L1: country + TLT/GLD vs VT — top 2
   l1: [
@@ -647,7 +648,7 @@ let COUNTRY_HM = [
   ['TLT', [0.95,0.93,0.98,1.00,1.04,0.88]],
   ['EWJ', [0.98,0.97,0.95,0.94,0.93,0.92]],
 ];
-const HM_MONTHS = ['Nov','Dec','Jan','Feb','Mar','Apr'];
+let HM_MONTHS = ['Nov','Dec','Jan','Feb','Mar','Apr'];
 
 let SECTOR_HM = [
   ['XLK', [1.13,1.08,1.06,1.09,0.95,1.13]],
@@ -751,8 +752,32 @@ function renderDashboard() {
             <span class="badge ${s.action==='BUY'?'b-buy':'b-hold'}" style="margin-right:6px">${s.action}</span>`).join('')}
         </div>
       </div>`;
+    } else if (item.action === 'HOLD') {
+      const slotVal = SIGNAL.portfolioSize / SIGNAL.l1.length;
+      html += `<div class="action-item">
+        <span class="badge b-hold">HOLD</span>
+        <span class="tk ${item.tkClass}">${item.ticker}</span>
+        <span class="action-name">${item.name}</span>
+        <span class="action-detail">~$${slotVal.toLocaleString()} · no change</span>
+        <span class="action-rs" style="color:var(--green)">RS ${item.rs} ↑</span>
+      </div>`;
     }
   });
+  const sigMode = SIGNAL.mode || '';
+  // In CASH mode, always append a clear "going to cash" banner after any sells
+  if (sigMode === 'CASH') {
+    html += `<div class="action-item" style="justify-content:center">
+      <span class="badge b-sell">CASH</span>
+      <span class="action-name">No asset outperforms VT — hold 100% cash this month</span>
+    </div>`;
+  }
+  // Never leave the action box blank — explain when there's nothing to trade
+  if (html.trim() === '') {
+    html = `<div class="action-item" style="justify-content:center">
+      <span class="badge b-hold">HOLD</span>
+      <span class="action-name">No changes — keep current holdings. System is working normally.</span>
+    </div>`;
+  }
   al.innerHTML = html;
 
   // Estimate cost: 1 sell + 1 buy (Webull ~0.214% round-trip)
@@ -1310,6 +1335,7 @@ function mapSignal(j) {
 
   SIGNAL = {
     date: dateStr,
+    mode: sig.mode || 'ACTIVE',
     portfolioSize: port,
     l1: l1Rows,
     l2: l2Rows,
