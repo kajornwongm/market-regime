@@ -1,1 +1,1 @@
-{"date": "2026-06-28", "final_holdings": [{"ticker": "EWY", "weight": 0.5, "layer": "L1"}, {"ticker": "SMH", "weight": 0.5, "layer": "L1"}], "holdings_history": [["EWY", "EWT"], ["EWT", "VNM"], [], [], [], [], [], [], [], [], ["EWY", "SMH"], ["EWY", "SMH"], ["EWY", "SMH"]]}
+{"date": "2026-06-29", "final_holdings": [{"ticker": "EWY", "weight": 0.5, "layer": "L1"}, {"ticker": "SMH", "weight": 0.5, "layer": "L1"}], "holdings_history": [["EWT", "VNM"], [], [], [], [], [], [], [], [], ["EWY", "SMH"], ["EWY", "SMH"], ["EWY", "SMH"], ["EWY", "SMH"]]}
