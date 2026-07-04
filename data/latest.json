@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-27T15:20:45.938086Z",
+  "generated_at": "2026-07-04T15:14:02.240445Z",
   "flow_date": "2026-04-20",
   "flow_updated": true,
   "n_flow_tickers": 4759,
   "n_asset_classes": 4,
-  "vix": 18.4,
+  "vix": 16.1,
   "vol_modifier": 1.0,
   "vol_label": "low (\u00d71.0)",
   "regime": {
     "label": "Transition / Neutral",
-    "composite": 48.4,
-    "adjusted": 48.4,
+    "composite": 49.6,
+    "adjusted": 49.6,
     "scores": {
-      "growth": 44.2,
-      "risk": 39.1,
-      "inflation": 36.1,
-      "liquidity": 56.8,
-      "sector": 74.8
+      "growth": 40.6,
+      "risk": 46.2,
+      "inflation": 33.6,
+      "liquidity": 54.6,
+      "sector": 81.7
     }
   },
   "strategy": [
@@ -28,27 +28,27 @@
     {
       "type": "regime_shift",
       "level": "alert",
-      "msg": "Regime shift: Growth \u2193 15pt"
+      "msg": "Regime shift: Growth \u2193 19pt"
     },
     {
       "type": "regime_shift",
       "level": "alert",
-      "msg": "Regime shift: Risk \u2193 26pt"
+      "msg": "Regime shift: Risk \u2193 19pt"
     },
     {
       "type": "regime_shift",
       "level": "alert",
-      "msg": "Regime shift: Inflation \u2193 16pt"
+      "msg": "Regime shift: Inflation \u2193 18pt"
     },
     {
       "type": "regime_shift",
       "level": "alert",
-      "msg": "Regime shift: Sector \u2191 23pt"
+      "msg": "Regime shift: Sector \u2191 30pt"
     },
     {
       "type": "leadership",
       "level": "info",
-      "msg": "Sector leadership: Healthcare leads (RS +10.8%)"
+      "msg": "Sector leadership: Healthcare leads (RS +14.0%)"
     },
     {
       "type": "asset_flow",
@@ -834,73 +834,60 @@
     {
       "ticker": "XLV",
       "name": "Healthcare",
-      "momentum": 8.2,
-      "rs": 10.8
+      "momentum": 12.3,
+      "rs": 14.0
     },
     {
       "ticker": "XLF",
       "name": "Financials",
-      "momentum": 4.5,
-      "rs": 7.2
+      "momentum": 8.5,
+      "rs": 10.2
     },
     {
       "ticker": "XLI",
       "name": "Industrials",
-      "momentum": 4.2,
-      "rs": 6.8
+      "momentum": 5.8,
+      "rs": 7.5
     },
     {
       "ticker": "XLU",
       "name": "Utilities",
-      "momentum": 3.0,
-      "rs": 5.6
-    },
-    {
-      "ticker": "XLB",
-      "name": "Materials",
-      "momentum": 1.2,
-      "rs": 3.8
-    },
-    {
-      "ticker": "XLK",
-      "name": "Technology",
-      "momentum": -1.7,
-      "rs": 0.9
+      "momentum": 4.9,
+      "rs": 6.6
     },
     {
       "ticker": "XAR",
       "name": "Defense",
-      "momentum": -1.7,
-      "rs": 0.9
+      "momentum": 3.0,
+      "rs": 4.7
+    },
+    {
+      "ticker": "XLB",
+      "name": "Materials",
+      "momentum": 1.3,
+      "rs": 3.0
     },
     {
       "ticker": "XLE",
       "name": "Energy",
-      "momentum": -4.8,
-      "rs": -2.2
+      "momentum": -7.5,
+      "rs": -5.8
+    },
+    {
+      "ticker": "XLK",
+      "name": "Technology",
+      "momentum": -8.8,
+      "rs": -7.1
     }
   ],
   "countries": [
     {
-      "ticker": "TLT",
-      "name": "\ud83d\udfe1 US 20yr Bond",
-      "ret_1m": 2.8,
-      "ret_3m": 3.2,
-      "rs_vs_vt": 4.5,
-      "rs_vs_spy": 5.4,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": -1207.6,
-      "flow_1w_mn": 129.7,
-      "flow_accel": true,
-      "flow_dir": "outflow"
-    },
-    {
       "ticker": "INDA",
       "name": "\ud83c\uddee\ud83c\uddf3 India",
-      "ret_1m": 2.1,
-      "ret_3m": 8.2,
-      "rs_vs_vt": 3.8,
-      "rs_vs_spy": 4.7,
+      "ret_1m": 3.2,
+      "ret_3m": 6.2,
+      "rs_vs_vt": 4.8,
+      "rs_vs_spy": 4.9,
       "ma_signal": "insufficient",
       "flow_4w_mn": -1558.6,
       "flow_1w_mn": -384.5,
@@ -908,51 +895,12 @@
       "flow_dir": "outflow"
     },
     {
-      "ticker": "EWJ",
-      "name": "\ud83c\uddef\ud83c\uddf5 Japan",
-      "ret_1m": 1.1,
-      "ret_3m": 14.6,
-      "rs_vs_vt": 2.8,
-      "rs_vs_spy": 3.7,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": -283.7,
-      "flow_1w_mn": 389.7,
-      "flow_accel": true,
-      "flow_dir": "outflow"
-    },
-    {
-      "ticker": "IEF",
-      "name": "\ud83d\udfe1 US 7-10yr Bond",
-      "ret_1m": 1.1,
-      "ret_3m": 1.5,
-      "rs_vs_vt": 2.8,
-      "rs_vs_spy": 3.7,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": 370.2,
-      "flow_1w_mn": -934.9,
-      "flow_accel": false,
-      "flow_dir": "inflow"
-    },
-    {
-      "ticker": "EWT",
-      "name": "\ud83c\uddf9\ud83c\uddfc Taiwan",
-      "ret_1m": -0.2,
-      "ret_3m": 47.9,
-      "rs_vs_vt": 1.5,
-      "rs_vs_spy": 2.5,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": -452.3,
-      "flow_1w_mn": 45.9,
-      "flow_accel": true,
-      "flow_dir": "outflow"
-    },
-    {
       "ticker": "EWQ",
       "name": "\ud83c\uddeb\ud83c\uddf7 France",
-      "ret_1m": -0.2,
-      "ret_3m": 9.6,
-      "rs_vs_vt": 1.4,
-      "rs_vs_spy": 2.4,
+      "ret_1m": 2.0,
+      "ret_3m": 7.5,
+      "rs_vs_vt": 3.7,
+      "rs_vs_spy": 3.7,
       "ma_signal": "insufficient",
       "flow_4w_mn": 51.9,
       "flow_1w_mn": 0.0,
@@ -960,51 +908,12 @@
       "flow_dir": "inflow"
     },
     {
-      "ticker": "EWY",
-      "name": "\ud83c\uddf0\ud83c\uddf7 Korea",
-      "ret_1m": -0.5,
-      "ret_3m": 63.1,
-      "rs_vs_vt": 1.2,
-      "rs_vs_spy": 2.1,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": -275.0,
-      "flow_1w_mn": -27.9,
-      "flow_accel": true,
-      "flow_dir": "outflow"
-    },
-    {
-      "ticker": "KSA",
-      "name": "\ud83c\uddf8\ud83c\udde6 Saudi Arabia",
-      "ret_1m": -0.9,
-      "ret_3m": 1.2,
-      "rs_vs_vt": 0.8,
-      "rs_vs_spy": 1.7,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": -15.8,
-      "flow_1w_mn": 0.0,
-      "flow_accel": true,
-      "flow_dir": "outflow"
-    },
-    {
-      "ticker": "EWU",
-      "name": "\ud83c\uddec\ud83c\udde7 UK",
-      "ret_1m": -1.7,
-      "ret_3m": 5.2,
-      "rs_vs_vt": -0.0,
-      "rs_vs_spy": 0.9,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": 199.4,
-      "flow_1w_mn": 0.0,
-      "flow_accel": false,
-      "flow_dir": "inflow"
-    },
-    {
       "ticker": "VNM",
       "name": "\ud83c\uddfb\ud83c\uddf3 Vietnam",
-      "ret_1m": -2.0,
-      "ret_3m": 9.8,
-      "rs_vs_vt": -0.3,
-      "rs_vs_spy": 0.6,
+      "ret_1m": 2.0,
+      "ret_3m": 5.8,
+      "rs_vs_vt": 3.6,
+      "rs_vs_spy": 3.7,
       "ma_signal": "insufficient",
       "flow_4w_mn": -39.1,
       "flow_1w_mn": -3.5,
@@ -1012,24 +921,76 @@
       "flow_dir": "outflow"
     },
     {
-      "ticker": "EWA",
-      "name": "\ud83c\udde6\ud83c\uddfa Australia",
-      "ret_1m": -2.0,
-      "ret_3m": 4.2,
-      "rs_vs_vt": -0.3,
-      "rs_vs_spy": 0.7,
+      "ticker": "EWU",
+      "name": "\ud83c\uddec\ud83c\udde7 UK",
+      "ret_1m": 1.9,
+      "ret_3m": 3.5,
+      "rs_vs_vt": 3.6,
+      "rs_vs_spy": 3.6,
       "ma_signal": "insufficient",
-      "flow_4w_mn": 5.5,
+      "flow_4w_mn": 199.4,
       "flow_1w_mn": 0.0,
       "flow_accel": false,
       "flow_dir": "inflow"
     },
     {
+      "ticker": "TLT",
+      "name": "\ud83d\udfe1 US 20yr Bond",
+      "ret_1m": 0.2,
+      "ret_3m": -0.7,
+      "rs_vs_vt": 1.8,
+      "rs_vs_spy": 1.9,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": -1207.6,
+      "flow_1w_mn": 129.7,
+      "flow_accel": true,
+      "flow_dir": "outflow"
+    },
+    {
+      "ticker": "IEF",
+      "name": "\ud83d\udfe1 US 7-10yr Bond",
+      "ret_1m": 0.2,
+      "ret_3m": -0.5,
+      "rs_vs_vt": 1.8,
+      "rs_vs_spy": 1.9,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": 370.2,
+      "flow_1w_mn": -934.9,
+      "flow_accel": false,
+      "flow_dir": "inflow"
+    },
+    {
+      "ticker": "EWJ",
+      "name": "\ud83c\uddef\ud83c\uddf5 Japan",
+      "ret_1m": 0.1,
+      "ret_3m": 9.8,
+      "rs_vs_vt": 1.7,
+      "rs_vs_spy": 1.8,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": -283.7,
+      "flow_1w_mn": 389.7,
+      "flow_accel": true,
+      "flow_dir": "outflow"
+    },
+    {
+      "ticker": "EWG",
+      "name": "\ud83c\udde9\ud83c\uddea Germany",
+      "ret_1m": -0.9,
+      "ret_3m": 8.2,
+      "rs_vs_vt": 0.7,
+      "rs_vs_spy": 0.8,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": -238.5,
+      "flow_1w_mn": -37.7,
+      "flow_accel": true,
+      "flow_dir": "outflow"
+    },
+    {
       "ticker": "SPY",
       "name": "\ud83c\uddfa\ud83c\uddf8 US",
-      "ret_1m": -2.6,
-      "ret_3m": 15.3,
-      "rs_vs_vt": -0.9,
+      "ret_1m": -1.7,
+      "ret_3m": 13.9,
+      "rs_vs_vt": -0.1,
       "rs_vs_spy": 0.0,
       "ma_signal": "insufficient",
       "flow_4w_mn": 5009.5,
@@ -1038,12 +999,38 @@
       "flow_dir": "inflow"
     },
     {
+      "ticker": "KSA",
+      "name": "\ud83c\uddf8\ud83c\udde6 Saudi Arabia",
+      "ret_1m": -2.0,
+      "ret_3m": -3.6,
+      "rs_vs_vt": -0.3,
+      "rs_vs_spy": -0.3,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": -15.8,
+      "flow_1w_mn": 0.0,
+      "flow_accel": true,
+      "flow_dir": "outflow"
+    },
+    {
+      "ticker": "EWT",
+      "name": "\ud83c\uddf9\ud83c\uddfc Taiwan",
+      "ret_1m": -2.1,
+      "ret_3m": 48.2,
+      "rs_vs_vt": -0.5,
+      "rs_vs_spy": -0.4,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": -452.3,
+      "flow_1w_mn": 45.9,
+      "flow_accel": true,
+      "flow_dir": "outflow"
+    },
+    {
       "ticker": "EWZ",
       "name": "\ud83c\udde7\ud83c\uddf7 Brazil",
-      "ret_1m": -3.1,
-      "ret_3m": -4.4,
-      "rs_vs_vt": -1.4,
-      "rs_vs_spy": -0.5,
+      "ret_1m": -2.9,
+      "ret_3m": -9.4,
+      "rs_vs_vt": -1.2,
+      "rs_vs_spy": -1.2,
       "ma_signal": "insufficient",
       "flow_4w_mn": 774.6,
       "flow_1w_mn": 686.2,
@@ -1053,10 +1040,10 @@
     {
       "ticker": "EWW",
       "name": "\ud83c\uddf2\ud83c\uddfd Mexico",
-      "ret_1m": -3.9,
-      "ret_3m": 6.1,
-      "rs_vs_vt": -2.2,
-      "rs_vs_spy": -1.3,
+      "ret_1m": -3.1,
+      "ret_3m": 0.7,
+      "rs_vs_vt": -1.5,
+      "rs_vs_spy": -1.4,
       "ma_signal": "insufficient",
       "flow_4w_mn": -112.0,
       "flow_1w_mn": 40.3,
@@ -1064,27 +1051,14 @@
       "flow_dir": "outflow"
     },
     {
-      "ticker": "EWG",
-      "name": "\ud83c\udde9\ud83c\uddea Germany",
-      "ret_1m": -5.1,
-      "ret_3m": 8.8,
-      "rs_vs_vt": -3.4,
-      "rs_vs_spy": -2.5,
+      "ticker": "EWA",
+      "name": "\ud83c\udde6\ud83c\uddfa Australia",
+      "ret_1m": -3.3,
+      "ret_3m": 1.4,
+      "rs_vs_vt": -1.7,
+      "rs_vs_spy": -1.6,
       "ma_signal": "insufficient",
-      "flow_4w_mn": -238.5,
-      "flow_1w_mn": -37.7,
-      "flow_accel": true,
-      "flow_dir": "outflow"
-    },
-    {
-      "ticker": "MCHI",
-      "name": "\ud83c\udde8\ud83c\uddf3 China",
-      "ret_1m": -8.4,
-      "ret_3m": -7.3,
-      "rs_vs_vt": -6.7,
-      "rs_vs_spy": -5.8,
-      "ma_signal": "insufficient",
-      "flow_4w_mn": 66.3,
+      "flow_4w_mn": 5.5,
       "flow_1w_mn": 0.0,
       "flow_accel": false,
       "flow_dir": "inflow"
@@ -1092,13 +1066,39 @@
     {
       "ticker": "GLD",
       "name": "\ud83e\udd47 Gold",
-      "ret_1m": -8.5,
-      "ret_3m": -9.9,
-      "rs_vs_vt": -6.8,
-      "rs_vs_spy": -5.9,
+      "ret_1m": -8.2,
+      "ret_3m": -11.9,
+      "rs_vs_vt": -6.6,
+      "rs_vs_spy": -6.5,
       "ma_signal": "insufficient",
       "flow_4w_mn": -3611.4,
       "flow_1w_mn": 211.6,
+      "flow_accel": true,
+      "flow_dir": "outflow"
+    },
+    {
+      "ticker": "MCHI",
+      "name": "\ud83c\udde8\ud83c\uddf3 China",
+      "ret_1m": -10.4,
+      "ret_3m": -8.2,
+      "rs_vs_vt": -8.7,
+      "rs_vs_spy": -8.7,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": 66.3,
+      "flow_1w_mn": 0.0,
+      "flow_accel": false,
+      "flow_dir": "inflow"
+    },
+    {
+      "ticker": "EWY",
+      "name": "\ud83c\uddf0\ud83c\uddf7 Korea",
+      "ret_1m": -16.0,
+      "ret_3m": 46.6,
+      "rs_vs_vt": -14.4,
+      "rs_vs_spy": -14.3,
+      "ma_signal": "insufficient",
+      "flow_4w_mn": -275.0,
+      "flow_1w_mn": -27.9,
       "flow_accel": true,
       "flow_dir": "outflow"
     }
