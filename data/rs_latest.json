@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-28T20:10:16.365797Z",
-  "date": "2026-10-28",
+  "generated_at": "2026-10-29T20:07:54.608174Z",
+  "date": "2026-10-29",
   "signal": {
     "mode": "ACTIVE",
     "l1_top": [
@@ -19,13 +19,10 @@
         "layer": "L1"
       }
     ],
-    "sells": [
-      "SMH"
-    ],
-    "buys": [
-      "EWY"
-    ],
+    "sells": [],
+    "buys": [],
     "holds": [
+      "EWY",
       "EWT"
     ],
     "l2_active": false,
@@ -34,112 +31,112 @@
       {
         "ticker": "EWY",
         "name": "\ud83c\uddf0\ud83c\uddf7 Korea",
-        "rs": 1.5401,
+        "rs": 1.5454,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "EWT",
         "name": "\ud83c\uddf9\ud83c\uddfc Taiwan",
-        "rs": 1.454,
+        "rs": 1.4575,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "SMH",
         "name": "\ud83c\uddfa\ud83c\uddf8 US Semiconductors",
-        "rs": 1.3982,
+        "rs": 1.4061,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "EWZ",
         "name": "\ud83c\udde7\ud83c\uddf7 Brazil",
-        "rs": 1.2483,
+        "rs": 1.2521,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "QQQ",
         "name": "\ud83c\uddfa\ud83c\uddf8 US Tech (Nasdaq-100)",
-        "rs": 1.0328,
+        "rs": 1.0349,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "EWW",
         "name": "\ud83c\uddf2\ud83c\uddfd Mexico",
-        "rs": 0.9763,
+        "rs": 0.973,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "EWQ",
         "name": "\ud83c\uddeb\ud83c\uddf7 France",
-        "rs": 0.9605,
+        "rs": 0.9613,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "VOO",
         "name": "\ud83c\uddfa\ud83c\uddf8 US Large Cap",
-        "rs": 0.9537,
+        "rs": 0.9467,
+        "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "EWG",
+        "name": "\ud83c\udde9\ud83c\uddea Germany",
+        "rs": 0.9273,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "IEF",
         "name": "\ud83d\udfe1 US 7-10yr Bond",
-        "rs": 0.9282,
+        "rs": 0.9217,
         "asset_class": "bond",
-        "outperforms": false
-      },
-      {
-        "ticker": "EWG",
-        "name": "\ud83c\udde9\ud83c\uddea Germany",
-        "rs": 0.9257,
-        "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "KSA",
         "name": "\ud83c\uddf8\ud83c\udde6 Saudi Arabia",
-        "rs": 0.9129,
+        "rs": 0.9076,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "GLD",
         "name": "\ud83e\udd47 Gold",
-        "rs": 0.8876,
+        "rs": 0.8885,
         "asset_class": "gold",
         "outperforms": false
       },
       {
         "ticker": "TLT",
         "name": "\ud83d\udfe1 US 20yr Bond",
-        "rs": 0.8536,
+        "rs": 0.8431,
         "asset_class": "bond",
         "outperforms": false
       },
       {
         "ticker": "INDA",
         "name": "\ud83c\uddee\ud83c\uddf3 India",
-        "rs": 0.8392,
+        "rs": 0.8409,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "VNM",
         "name": "\ud83c\uddfb\ud83c\uddf3 Vietnam",
-        "rs": 0.8332,
+        "rs": 0.8381,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "MCHI",
         "name": "\ud83c\udde8\ud83c\uddf3 China",
-        "rs": 0.7891,
+        "rs": 0.7832,
         "asset_class": "equity",
         "outperforms": false
       }
@@ -148,79 +145,79 @@
       {
         "ticker": "SMH",
         "name": "Semiconductors",
-        "rs": 1.41,
+        "rs": 1.4179,
         "outperforms": true
       },
       {
         "ticker": "XLE",
         "name": "Energy",
-        "rs": 1.2265,
+        "rs": 1.2276,
         "outperforms": true
       },
       {
         "ticker": "XLV",
         "name": "Health Care",
-        "rs": 1.0442,
+        "rs": 1.0417,
         "outperforms": true
       },
       {
         "ticker": "XLB",
         "name": "Materials",
-        "rs": 1.0194,
+        "rs": 1.0185,
         "outperforms": true
       },
       {
         "ticker": "XLP",
         "name": "Cons. Staples",
-        "rs": 1.0111,
+        "rs": 1.0156,
         "outperforms": true
       },
       {
         "ticker": "XLRE",
         "name": "Real Estate",
-        "rs": 0.9903,
+        "rs": 0.9898,
         "outperforms": false
       },
       {
         "ticker": "XLI",
         "name": "Industrials",
-        "rs": 0.9811,
+        "rs": 0.981,
         "outperforms": false
       },
       {
         "ticker": "XLF",
         "name": "Financials",
-        "rs": 0.9411,
+        "rs": 0.9326,
         "outperforms": false
       },
       {
         "ticker": "XLC",
         "name": "Communication",
-        "rs": 0.9311,
-        "outperforms": false
-      },
-      {
-        "ticker": "XLU",
-        "name": "Utilities",
-        "rs": 0.9048,
+        "rs": 0.9253,
         "outperforms": false
       },
       {
         "ticker": "GLD",
         "name": "\ud83e\udd47 Gold",
-        "rs": 0.8948,
+        "rs": 0.8958,
+        "outperforms": false
+      },
+      {
+        "ticker": "XLU",
+        "name": "Utilities",
+        "rs": 0.8902,
         "outperforms": false
       },
       {
         "ticker": "XLY",
         "name": "Cons. Discretionary",
-        "rs": 0.8666,
+        "rs": 0.8675,
         "outperforms": false
       },
       {
         "ticker": "TLT",
         "name": "\ud83d\udfe1 US 20yr Bond",
-        "rs": 0.8599,
+        "rs": 0.8494,
         "outperforms": false
       }
     ],
@@ -267,7 +264,7 @@
             1.7,
             1.39,
             1.3,
-            1.4
+            1.41
           ]
         },
         {
@@ -279,7 +276,7 @@
             2.09,
             1.64,
             1.7,
-            1.54
+            1.55
           ]
         },
         {
@@ -327,7 +324,7 @@
             1.48,
             1.29,
             1.36,
-            1.45
+            1.46
           ]
         },
         {
@@ -339,7 +336,7 @@
             0.97,
             0.8,
             0.89,
-            0.83
+            0.84
           ]
         },
         {
@@ -351,7 +348,7 @@
             0.76,
             0.77,
             0.72,
-            0.79
+            0.78
           ]
         },
         {
@@ -387,7 +384,7 @@
             1.01,
             1.08,
             0.97,
-            0.98
+            0.97
           ]
         },
         {
@@ -399,7 +396,7 @@
             0.86,
             0.91,
             0.91,
-            0.85
+            0.84
           ]
         },
         {
@@ -411,7 +408,7 @@
             0.82,
             0.92,
             0.92,
-            0.93
+            0.92
           ]
         },
         {
@@ -447,7 +444,7 @@
             1.75,
             1.4,
             1.32,
-            1.41
+            1.42
           ]
         },
         {
@@ -459,7 +456,7 @@
             0.89,
             0.9,
             0.97,
-            0.94
+            0.93
           ]
         },
         {
@@ -519,7 +516,7 @@
             0.91,
             0.89,
             0.97,
-            1.01
+            1.02
           ]
         },
         {
@@ -531,7 +528,7 @@
             0.91,
             0.94,
             0.92,
-            0.9
+            0.89
           ]
         },
         {
@@ -579,7 +576,7 @@
             0.88,
             0.92,
             0.92,
-            0.86
+            0.85
           ]
         },
         {
@@ -591,28 +588,28 @@
             1.0,
             1.07,
             1.0,
-            0.89
+            0.9
           ]
         }
       ]
     },
-    "clarity_score": 7.55,
+    "clarity_score": 6.3,
     "clarity_components": {
       "margin": 10.0,
       "consistency": 3.0,
-      "volume": 10.0,
-      "avg_rs": 1.4261,
+      "volume": 5.0,
+      "avg_rs": 1.5015,
       "streak": 0,
       "threshold": 5.5
     }
   },
-  "est_cost_usd": 36.91,
+  "est_cost_usd": 0.0,
   "dd_context": {
-    "current": -2.64,
+    "current": -2.27,
     "max": -34.24,
     "duration_m": 2,
-    "similar_10y": 35,
-    "severity_pct": 7.7
+    "similar_10y": 37,
+    "severity_pct": 6.6
   },
   "theme_watchlist": [
     {
@@ -760,10 +757,6 @@
     ],
     [
       "EWY",
-      "SMH"
-    ],
-    [
-      "EWY",
       "EWT"
     ],
     [
@@ -777,16 +770,20 @@
     [
       "EWY",
       "EWT"
+    ],
+    [
+      "EWY",
+      "EWT"
     ]
   ],
   "prev_holdings": [
     {
-      "ticker": "EWT",
+      "ticker": "EWY",
       "weight": 0.5,
       "layer": "L1"
     },
     {
-      "ticker": "SMH",
+      "ticker": "EWT",
       "weight": 0.5,
       "layer": "L1"
     }
