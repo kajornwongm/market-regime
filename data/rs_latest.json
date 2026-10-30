@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-29T20:07:54.608174Z",
-  "date": "2026-10-29",
+  "generated_at": "2026-10-30T19:53:31.183208Z",
+  "date": "2026-10-30",
   "signal": {
     "mode": "ACTIVE",
     "l1_top": [
@@ -22,8 +22,8 @@
     "sells": [],
     "buys": [],
     "holds": [
-      "EWY",
-      "EWT"
+      "EWT",
+      "EWY"
     ],
     "l2_active": false,
     "l2_sectors": [],
@@ -31,112 +31,112 @@
       {
         "ticker": "EWY",
         "name": "\ud83c\uddf0\ud83c\uddf7 Korea",
-        "rs": 1.5454,
+        "rs": 1.5534,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "EWT",
         "name": "\ud83c\uddf9\ud83c\uddfc Taiwan",
-        "rs": 1.4575,
+        "rs": 1.4615,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "SMH",
         "name": "\ud83c\uddfa\ud83c\uddf8 US Semiconductors",
-        "rs": 1.4061,
+        "rs": 1.4136,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "EWZ",
         "name": "\ud83c\udde7\ud83c\uddf7 Brazil",
-        "rs": 1.2521,
+        "rs": 1.2532,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "QQQ",
         "name": "\ud83c\uddfa\ud83c\uddf8 US Tech (Nasdaq-100)",
-        "rs": 1.0349,
+        "rs": 1.0373,
         "asset_class": "equity",
         "outperforms": true
       },
       {
         "ticker": "EWW",
         "name": "\ud83c\uddf2\ud83c\uddfd Mexico",
-        "rs": 0.973,
+        "rs": 0.9672,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "EWQ",
         "name": "\ud83c\uddeb\ud83c\uddf7 France",
-        "rs": 0.9613,
+        "rs": 0.9541,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "VOO",
         "name": "\ud83c\uddfa\ud83c\uddf8 US Large Cap",
-        "rs": 0.9467,
+        "rs": 0.943,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "EWG",
         "name": "\ud83c\udde9\ud83c\uddea Germany",
-        "rs": 0.9273,
+        "rs": 0.9346,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "IEF",
         "name": "\ud83d\udfe1 US 7-10yr Bond",
-        "rs": 0.9217,
+        "rs": 0.9157,
         "asset_class": "bond",
         "outperforms": false
       },
       {
         "ticker": "KSA",
         "name": "\ud83c\uddf8\ud83c\udde6 Saudi Arabia",
-        "rs": 0.9076,
+        "rs": 0.9077,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "GLD",
         "name": "\ud83e\udd47 Gold",
-        "rs": 0.8885,
+        "rs": 0.8924,
         "asset_class": "gold",
-        "outperforms": false
-      },
-      {
-        "ticker": "TLT",
-        "name": "\ud83d\udfe1 US 20yr Bond",
-        "rs": 0.8431,
-        "asset_class": "bond",
         "outperforms": false
       },
       {
         "ticker": "INDA",
         "name": "\ud83c\uddee\ud83c\uddf3 India",
-        "rs": 0.8409,
+        "rs": 0.8421,
         "asset_class": "equity",
         "outperforms": false
       },
       {
         "ticker": "VNM",
         "name": "\ud83c\uddfb\ud83c\uddf3 Vietnam",
-        "rs": 0.8381,
+        "rs": 0.8352,
         "asset_class": "equity",
+        "outperforms": false
+      },
+      {
+        "ticker": "TLT",
+        "name": "\ud83d\udfe1 US 20yr Bond",
+        "rs": 0.8297,
+        "asset_class": "bond",
         "outperforms": false
       },
       {
         "ticker": "MCHI",
         "name": "\ud83c\udde8\ud83c\uddf3 China",
-        "rs": 0.7832,
+        "rs": 0.7802,
         "asset_class": "equity",
         "outperforms": false
       }
@@ -145,79 +145,79 @@
       {
         "ticker": "SMH",
         "name": "Semiconductors",
-        "rs": 1.4179,
+        "rs": 1.4253,
         "outperforms": true
       },
       {
         "ticker": "XLE",
         "name": "Energy",
-        "rs": 1.2276,
+        "rs": 1.2231,
         "outperforms": true
       },
       {
         "ticker": "XLV",
         "name": "Health Care",
-        "rs": 1.0417,
-        "outperforms": true
-      },
-      {
-        "ticker": "XLB",
-        "name": "Materials",
-        "rs": 1.0185,
+        "rs": 1.0464,
         "outperforms": true
       },
       {
         "ticker": "XLP",
         "name": "Cons. Staples",
-        "rs": 1.0156,
+        "rs": 1.0175,
+        "outperforms": true
+      },
+      {
+        "ticker": "XLB",
+        "name": "Materials",
+        "rs": 1.0086,
         "outperforms": true
       },
       {
         "ticker": "XLRE",
         "name": "Real Estate",
-        "rs": 0.9898,
+        "rs": 0.985,
         "outperforms": false
       },
       {
         "ticker": "XLI",
         "name": "Industrials",
-        "rs": 0.981,
+        "rs": 0.9796,
         "outperforms": false
       },
       {
         "ticker": "XLF",
         "name": "Financials",
-        "rs": 0.9326,
+        "rs": 0.9315,
         "outperforms": false
       },
       {
         "ticker": "XLC",
         "name": "Communication",
-        "rs": 0.9253,
+        "rs": 0.93,
         "outperforms": false
       },
       {
         "ticker": "GLD",
         "name": "\ud83e\udd47 Gold",
-        "rs": 0.8958,
+        "rs": 0.8996,
         "outperforms": false
       },
       {
         "ticker": "XLU",
         "name": "Utilities",
-        "rs": 0.8902,
+        "rs": 0.8759,
         "outperforms": false
       },
       {
         "ticker": "XLY",
         "name": "Cons. Discretionary",
-        "rs": 0.8675,
+        "rs": 0.8661,
         "outperforms": false
       },
       {
         "ticker": "TLT",
         "name": "\ud83d\udfe1 US 20yr Bond",
-        "rs": 0.8494,
+        "rs": 0.836,
         "outperforms": false
       }
     ],
@@ -240,7 +240,7 @@
             0.92,
             0.95,
             1.06,
-            0.95
+            0.94
           ]
         },
         {
@@ -252,7 +252,7 @@
             1.04,
             0.97,
             1.0,
-            1.03
+            1.04
           ]
         },
         {
@@ -360,7 +360,7 @@
             0.89,
             0.94,
             0.95,
-            0.96
+            0.95
           ]
         },
         {
@@ -396,7 +396,7 @@
             0.86,
             0.91,
             0.91,
-            0.84
+            0.83
           ]
         },
         {
@@ -444,7 +444,7 @@
             1.75,
             1.4,
             1.32,
-            1.42
+            1.43
           ]
         },
         {
@@ -468,7 +468,7 @@
             1.02,
             1.1,
             1.23,
-            1.23
+            1.22
           ]
         },
         {
@@ -480,7 +480,7 @@
             1.01,
             0.99,
             1.03,
-            1.04
+            1.05
           ]
         },
         {
@@ -528,7 +528,7 @@
             0.91,
             0.94,
             0.92,
-            0.89
+            0.88
           ]
         },
         {
@@ -552,7 +552,7 @@
             0.99,
             0.94,
             1.02,
-            1.02
+            1.01
           ]
         },
         {
@@ -576,7 +576,7 @@
             0.88,
             0.92,
             0.92,
-            0.85
+            0.84
           ]
         },
         {
@@ -593,23 +593,23 @@
         }
       ]
     },
-    "clarity_score": 6.3,
+    "clarity_score": 8.37,
     "clarity_components": {
       "margin": 10.0,
-      "consistency": 3.0,
-      "volume": 5.0,
-      "avg_rs": 1.5015,
-      "streak": 0,
+      "consistency": 5.33,
+      "volume": 10.0,
+      "avg_rs": 1.5074,
+      "streak": 1,
       "threshold": 5.5
     }
   },
   "est_cost_usd": 0.0,
   "dd_context": {
-    "current": -2.27,
+    "current": -2.47,
     "max": -34.24,
     "duration_m": 2,
-    "similar_10y": 37,
-    "severity_pct": 6.6
+    "similar_10y": 36,
+    "severity_pct": 7.2
   },
   "theme_watchlist": [
     {
@@ -753,10 +753,6 @@
     ],
     [
       "EWY",
-      "SMH"
-    ],
-    [
-      "EWY",
       "EWT"
     ],
     [
@@ -766,6 +762,10 @@
     [
       "EWT",
       "SMH"
+    ],
+    [
+      "EWY",
+      "EWT"
     ],
     [
       "EWY",
